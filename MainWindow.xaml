@@ -1,0 +1,382 @@
+﻿<Window x:Class="Sudoku.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sudoku"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="580" Width="880">
+    <Window.Resources>
+    </Window.Resources>
+
+    <!--<Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Erease" />
+        </ContextMenu>
+    </Window.ContextMenu>-->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="10*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30*" />
+                    <RowDefinition Height="60*" />
+                    <RowDefinition Height="4*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
+                        <Button Content="Get Image" Height="28" Margin="0,10,0,0" Click="btnGetImage" />
+                        <Button Content="Erase Image" Height="28" Margin="0,10,0,0" Click="btnEraseImage" />
+                        <Button Content="Reset " Height="28" Margin="0,10,0,0" Click="btnResetItem" />
+                        <Button Content="Erase Item" Height="28" Margin="0,10,0,0" Click="btnEraseItem" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
+                        <Button Content="Get Clipboard" Height="28" Margin="0,10,0,0" Click="btnGetClipboard" />
+                        <Button Content="SaveAs" Height="28" Margin="0,10,0,0" Click="btnSaveAsGame" />
+                        <Button Content="SaveAdd" Height="28" Margin="0,10,0,0" Click="btnSaveAddGame" />
+                        <Button Content="Diagnose" Height="28" Margin="0,10,0,0" Click="btnDiagnose" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="20*" />
+                        <ColumnDefinition Width="12*" />
+                        <ColumnDefinition Width="10*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label Name="I0" Grid.Column="0" Content=" " FontSize="40" Margin="5,0,0,0" />
+                        <StackPanel>
+                            <RadioButton Name="rdoQuestion" Content="●" Foreground="Black" IsChecked="True" />
+                            <RadioButton Name="rdoAnswer" Content="●" Foreground="Red" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0" Grid.Column="2" Content=" " Click="btnNumberItem" />
+                        <Button Grid.Row="1" Grid.Column="2" Content="1" Click="btnNumberItem" />
+                        <Button Grid.Row="2" Grid.Column="2" Content="2" Click="btnNumberItem" />
+                        <Button Grid.Row="3" Grid.Column="2" Content="3" Click="btnNumberItem" />
+                        <Button Grid.Row="4" Grid.Column="2" Content="4" Click="btnNumberItem" />
+                        <Button Grid.Row="5" Grid.Column="2" Content="5" Click="btnNumberItem" />
+                        <Button Grid.Row="6" Grid.Column="2" Content="6" Click="btnNumberItem" />
+                        <Button Grid.Row="7" Grid.Column="2" Content="7" Click="btnNumberItem" />
+                        <Button Grid.Row="8" Grid.Column="2" Content="8" Click="btnNumberItem" />
+                        <Button Grid.Row="9" Grid.Column="2" Content="9" Click="btnNumberItem" />
+                    </Grid>
+                </Grid>
+
+            </Grid>
+
+            <Grid Name="grid1" Grid.Column="1" >
+                <Grid.Background>
+                    <ImageBrush x:Name="backImage" />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="2" />
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="2" />
+                    <RowDefinition Height="10*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="10*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C9_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="1" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="2" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="3" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="4" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content=""  PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="6" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="7" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="8" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="9" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C6_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="a" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="b" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="c" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C6_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="d" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="e" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="f" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C6_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="g" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="h" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="i" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C3_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="A" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="B" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="C" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C3_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="D" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="E" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="F" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C3_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="G" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="H" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_3" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="I" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+
+                <Grid Grid.Row="2" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C9_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="1" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="2" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="3" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="4" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="5" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="6" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="7" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="8" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="9" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C6_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="a" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="b" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="c" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C6_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="d" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="e" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="f" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C6_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="g" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="h" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="i" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C3_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="A" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="B" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_4" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="C" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C3_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="D" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="E" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_5" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="F" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C3_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="G" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="H" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_6" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="I" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+
+                <Grid Grid.Row="4" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C9_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="1" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="2" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="3" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="4" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="5" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="6" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="7" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C8_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="8" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C7_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="9" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C6_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="a" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="b" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="c" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C6_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="d" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="e" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="f" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C6_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="g" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C5_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="h" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C4_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="i" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="C3_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="A" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="B" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_7" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="C" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C3_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="D" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="1" Content="E" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_8" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="2" Content="F" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C3_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="0" Content="G" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C2_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="1" Content="H" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C1_9" Style="{StaticResource FlatButton}" Grid.Row="2" Grid.Column="2" Content="I" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                </Grid>
+
+                <Grid Grid.Row="0" Grid.Column="1" Background="DarkGray" />
+                <Grid Grid.Row="0" Grid.Column="3" Background="DarkGray" />
+                <Grid Grid.Row="1" Grid.Column="0" Background="DarkGray" />
+                <Grid Grid.Row="1" Grid.Column="2" Background="DarkGray" />
+                <Grid Grid.Row="1" Grid.Column="4" Background="DarkGray" />
+                <Grid Grid.Row="2" Grid.Column="1" Background="DarkGray" />
+                <Grid Grid.Row="2" Grid.Column="3" Background="DarkGray" />
+                <Grid Grid.Row="3" Grid.Column="0" Background="DarkGray" />
+                <Grid Grid.Row="3" Grid.Column="2" Background="DarkGray" />
+                <Grid Grid.Row="3" Grid.Column="4" Background="DarkGray" />
+                <Grid Grid.Row="4" Grid.Column="1" Background="DarkGray" />
+                <Grid Grid.Row="4" Grid.Column="3" Background="DarkGray" />
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="5*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Content=" " Click="btnNumberItem" />
+                    <Button Grid.Row="1" Content="1" Click="btnNumberItem" />
+                    <Button Grid.Row="2" Content="2" Click="btnNumberItem" />
+                    <Button Grid.Row="3" Content="3" Click="btnNumberItem" />
+                    <Button Grid.Row="4" Content="4" Click="btnNumberItem" />
+                    <Button Grid.Row="5" Content="5" Click="btnNumberItem" />
+                    <Button Grid.Row="6" Content="6" Click="btnNumberItem" />
+                    <Button Grid.Row="7" Content="7" Click="btnNumberItem" />
+                    <Button Grid.Row="8" Content="8" Click="btnNumberItem" />
+                    <Button Grid.Row="9" Content="9" Click="btnNumberItem" />
+                </Grid>
+            </Grid>
+        
+            <Grid Grid.Column="3">
+                <ListBox Name="lstHistory"  SelectionChanged="lstBoxSelect" SelectionMode="Single" >
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="deleteGame" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <StatusBar VerticalAlignment="Bottom"  Background="LightGray" >
+                <Label Name="sblbl1" Content="" Foreground="Blue" Width="300" />
+                <Separator/>
+                <Label Name="sblbl2" Content="" />
+            </StatusBar>
+        </Grid>
+        
+    </Grid>
+</Window>
