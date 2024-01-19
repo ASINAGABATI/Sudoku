@@ -1,13 +1,8 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Security.Policy;
 
 namespace Sudoku
 {
@@ -16,43 +11,18 @@ namespace Sudoku
         public const string CONF_FILENAME = "sudoku.json";
 
         public static readonly string[,] CELLNAME = {
-                            { "C9_1", "C8_1", "C7_1", "C6_1", "C5_1", "C4_1", "C3_1", "C2_1", "C1_1" },
-                            { "C9_2", "C8_2", "C7_2", "C6_2", "C5_2", "C4_2", "C3_2", "C2_2", "C1_2" },
-                            { "C9_3", "C8_3", "C7_3", "C6_3", "C5_3", "C4_3", "C3_3", "C2_3", "C1_3" },
+              { "C9R1","C8R1","C7R1",  "C6R1","C5R1","C4R1",  "C3R1","C2R1","C1R1" },
+              { "C9R2","C8R2","C7R2",  "C6R2","C5R2","C4R2",  "C3R2","C2R2","C1R2" },
+              { "C9R3","C8R3","C7R3",  "C6R3","C5R3","C4R3",  "C3R3","C2R3","C1R3" },
 
-                            { "C9_4", "C8_4", "C7_4", "C6_4", "C5_4", "C4_4", "C3_4", "C2_4", "C1_4" },
-                            { "C9_5", "C8_5", "C7_5", "C6_5", "C5_5", "C4_5", "C3_5", "C2_5", "C1_5" },
-                            { "C9_6", "C8_6", "C7_6", "C6_6", "C5_6", "C4_6", "C3_6", "C2_6", "C1_6" },
+              { "C9R4","C8R4","C7R4",  "C6R4","C5R4","C4R4",  "C3R4","C2R4","C1R4" },
+              { "C9R5","C8R5","C7R5",  "C6R5","C5R5","C4R5",  "C3R5","C2R5","C1R5" },
+              { "C9R6","C8R6","C7R6",  "C6R6","C5R6","C4R6",  "C3R6","C2R6","C1R6" },
 
-                            { "C9_7", "C8_7", "C7_7", "C6_7", "C5_7", "C4_7", "C3_7", "C2_7", "C1_7" },
-                            { "C9_8", "C8_8", "C7_8", "C6_8", "C5_8", "C4_8", "C3_8", "C2_8", "C1_8" },
-                            { "C9_9", "C8_9", "C7_9", "C6_9", "C5_9", "C4_9", "C3_9", "C2_9", "C1_9" }
-            };
-    }
-
-    internal class OnePeace
-    {
-        public int col { get; set; }    // 左から 1,2,3,4,5,6,7,8,9
-        public int row { get; set; }    // 上から 1,2,3,4,5,6,7,8,9
-        public int num { get; set; }    // 0:KURO(Question), 1:AKA(Answer)
-
-        public OnePeace()
-        {
-            col = 0;
-            row = 0;
-            num = 0;
-        }
-    }
-    internal class OneNumPeace
-    {
-        public string today { get; set; }
-        public List<OnePeace> onePeace { get; set; }
-
-        public OneNumPeace()
-        {
-            today = DateTime.Now.ToString();
-            onePeace = new List<OnePeace> { };
-        }
+              { "C9R7","C8R7","C7R7",  "C6R7","C5R7","C4R7",  "C3R7","C2R7","C1R7" },
+              { "C9R8","C8R8","C7R8",  "C6R8","C5R8","C4R8",  "C3R8","C2R8","C1R8" },
+              { "C9R9","C8R9","C7R9",  "C6R9","C5R9","C4R9",  "C3R9","C2R9","C1R9" }
+        };
     }
 
     public class Square
@@ -88,77 +58,192 @@ namespace Sudoku
             squares = new List<Square>();
         }
     }
+    public class PlayIO
+    {
+        public string today;
+        public Dictionary<string, Square> squares;
+
+        public PlayIO()
+        {
+            today = "";
+            squares= new Dictionary<string, Square>();
+        }
+
+    }
     public class NumPlace
     {
+        private int save;
         public int number { get; set; }
         public List<Play> plays { get; set; }
+        
         private string confPath = System.IO.Path.Combine(Environment.CurrentDirectory, Constants.CONF_FILENAME);
+        private List<PlayIO> playsIO;
 
         public NumPlace()
         {
             number = 0;
             plays = new List<Play>();
-        }
 
-        public Play Load(int index = -1)
+            save = 0;
+            playsIO = new List<PlayIO>();
+        }
+        public void final()
         {
-            Play r = new Play();
+            if (save != 0)
+            {
+                try
+                {
+                    plays = new List<Play>();
+                    foreach (var playIO in playsIO)
+                    {
+                        Play play = new();
+                        play.today = playIO.today;
+                        foreach(var square in playIO.squares)
+                        {
+                            Square square2 = new Square();
+                            square2.col = square.Value.col;
+                            square2.row = square.Value.row;
+                            square2.num = square.Value.num;
+                            square2.cond = square.Value.cond;
+                            play.squares.Add(square2);
+                        }
+                        plays.Add(play);
+                    }
+
+                    var json_str = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+
+                    string confPath = System.IO.Path.Combine(Environment.CurrentDirectory, Constants.CONF_FILENAME);
+                    File.WriteAllText(confPath, json_str);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        public void first()
+        {
+            load();
+        }
+        private void load()
+        {
             try
             {
-                string jsonString = File.ReadAllText(confPath);
-                if (jsonString != null)
+                if (File.Exists(confPath))
                 {
-                    var rdata = JsonSerializer.Deserialize<NumPlace>(jsonString);
-                    if (rdata != null)
+                    string jsonString = File.ReadAllText(confPath);
+                    if (jsonString != null)
                     {
-                        number = rdata.number;
-                        plays = rdata.plays;
-
-                        if (index < 0)
+                        var rdata = JsonSerializer.Deserialize<NumPlace>(jsonString);
+                        if (rdata != null)
                         {
-                            r = plays[plays.Count - 1];
+                            number = rdata.number;
+                            plays = rdata.plays;
                         }
-                        else
+                        if (plays.Count > 0)
                         {
-                            if (index < plays.Count)
+                            foreach (var play in plays)
                             {
-                                r = plays[index];
+                                PlayIO pi = new PlayIO();
+                                pi.today = play.today;
+                                foreach (var squre in play.squares)
+                                {
+                                    string key = String.Format("C{0}R{1}", squre.col, squre.row);
+                                    pi.squares[key] = squre;
+                                }
+                                playsIO.Add(pi);
                             }
                         }
                     }
                 }
+                else
+                {
+                    PlayIO pi = new PlayIO();
+                    pi.today = DateTime.Now.ToString();
+                    pi.squares = new Dictionary<string, Square>();
+                    playsIO.Add(pi);
+                }
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, confPath);
             }
-            return r;
         }
-        public bool SaveSudoku2(NumPlace np)
-        {
-            bool r = true;
-            try
-            {
-                var json_str = JsonSerializer.Serialize(np, new JsonSerializerOptions { WriteIndented = true });
 
-                string confPath = System.IO.Path.Combine(Environment.CurrentDirectory, Constants.CONF_FILENAME);
-                File.WriteAllText(confPath, json_str);
-            }
-            catch (Exception ex)
+        public Play loadPlay(int index)
+        {
+            Play play = new Play();
+            if (plays.Count > 0)
             {
-                MessageBox.Show(ex.Message);
-                r = false;
+                int idx = index < 0 ? playsIO.Count - 1 : index;
+
+                play.today = playsIO[idx].today;
+                foreach(var pio in playsIO[idx].squares)
+                {
+                    play.squares.Add(pio.Value);
+                }
             }
-            return r;
+            return play;
+        }
+        public void removePlay(int index)
+        {
+            playsIO.RemoveAt(index);
+
+            save = 2;
+        }
+        public void updatePlay(int idx, Play play)
+        {
+            save = 1;
+            if (idx < 0)
+            {
+                PlayIO playIO = new PlayIO();
+                playIO.today = play.today;
+                foreach (var p in play.squares)
+                {
+                    string key = String.Format("C{0}R{1}", p.col, p.row);
+                    playIO.squares[key] = p;
+                }
+                playsIO.Add(playIO);
+            }
+            else
+            {
+                playsIO[idx].today = play.today;
+                playsIO[idx].squares = new Dictionary<string, Square>();
+                foreach (var p in play.squares)
+                {
+                    string key = String.Format("C{0}R{1}", p.col, p.row);
+                    playsIO[idx].squares[key] = p;
+                }
+            }
+        }
+        public void updateCell(int index, string key, int num, int cond)
+        {
+            string[] name = key.Substring(1).Split("R");
+            Square squre = new (Int32.Parse(name[0]), Int32.Parse(name[1]), num, cond);
+            playsIO[index].squares[key] = squre;
+
+            save = 11;
+        }
+        public void modifyCaption(int index, string cap)
+        {
+            playsIO[index].today = cap;
+            
+            save = 11;
         }
         public List<string> listGame()
         {
             List<string> lst = new();
-            foreach(var p in plays)
+            foreach (var p in playsIO)
             {
                 lst.Add(p.today);
             }
+
             return lst;
+        }
+        public string lookToday(int idx)
+        {
+            //return plays[idx].today;
+            return playsIO[idx].today;
         }
     }
 

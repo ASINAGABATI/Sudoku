@@ -1,9 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,16 +28,34 @@ namespace Sudoku
         {
             InitializeComponent();
 
+            string fullPath = Assembly.GetExecutingAssembly().Location;
+            FileVersionInfo info = FileVersionInfo.GetVersionInfo(fullPath);
+            Title = info.ProductName + " " + info.FileVersion.ToString();
+
             colorQuestion = rdoQuestion.Foreground;
             colorAnswer= rdoAnswer.Foreground;
 
             numPlace = new NumPlace();
+            numPlace.first();
+
             initView();
 
+            var lst = numPlace.listGame();
+            if (lst.Count > 0 )
+            {
+                lstHistory.ItemsSource = lst;
+                lstHistory.SelectedIndex = lst.Count - 1;
+            }
+            I0.Content = "";
         }
+        protected virtual void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            numPlace.final();
+        }
+
         private void initView(int index = -1)
         {
-            Play play = numPlace.Load(index);
+            Play play = numPlace.loadPlay(index);
             backImage.ImageSource = null;
             foreach (string a in Constants.CELLNAME)
             {
@@ -45,23 +63,15 @@ namespace Sudoku
                 Button btn = (Button)obj;
                 btn.Content = " ";
             }
-            var items = new ObservableCollection<string>();
-            if (numPlace.plays.Count > 0)
+            if (play.squares.Count > 0)
             {
-                foreach(var p in play.squares)
+                foreach (var p in play.squares)
                 {
-                    //string s = String.Format("C{0}_{1}", p.col.ToString(), p.row.ToString());
-                    object obj = FindName(String.Format("C{0}_{1}", p.col.ToString(), p.row.ToString()) );
+                    object obj = FindName(String.Format("C{0}R{1}", p.col.ToString(), p.row.ToString()) );
                     Button btn = (Button)obj;
                     btn.Content = p.num.ToString();
                     btn.Foreground = p.cond == 0 ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
                 }
-            }
-            if (index == -1)
-            {
-                var lst = numPlace.listGame();
-                lstHistory.ItemsSource = lst;
-                lstHistory.SelectedIndex = lst.Count - 1;
             }
         }
 
@@ -122,8 +132,6 @@ namespace Sudoku
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                //txtEditor.Text = File.ReadAllText(openFileDialog.FileName);
-
                 filePathToImageSource(openFileDialog.FileName);
             }
         }
@@ -168,7 +176,7 @@ namespace Sudoku
                 Int32 n;
                 if (Int32.TryParse(btn.Content.ToString(), out n))
                 {
-                    string[] name = btn.Name.Substring(1).Split("_");
+                    string[] name = btn.Name.Substring(1).Split("R");
                     var g = new Square();
                     g.col = Int32.Parse(name[0]);
                     g.row = Int32.Parse(name[1]);
@@ -176,20 +184,29 @@ namespace Sudoku
                     g.cond = btn.Foreground == (Brush)(colorQuestion) ? 0 : 1;
                     play.squares.Add(g);
                 }
-                play.today = DateTime.Now.ToString();
             }
             if (play.squares.Count > 0)
             {
                 if( k == -1)
                 {
-                    numPlace.plays.Add(play);
+                    play.today = DateTime.Now.ToString();
                 }
                 else
                 {
-                    numPlace.plays[k] = play;
+                    play.today = lstHistory.SelectedItem.ToString();
                 }
+                numPlace.updatePlay(k, play);
+            }
+            if (k == -1)
+            {
+                initView();
 
-                numPlace.SaveSudoku2(numPlace);
+                var lst = numPlace.listGame();
+                if (lst.Count > 0)
+                {
+                    lstHistory.ItemsSource = lst;
+                    lstHistory.SelectedIndex = lst.Count - 1;
+                }
             }
         }
         private void btnDiagnose(object sender, EventArgs e)
@@ -203,7 +220,7 @@ namespace Sudoku
                 int n;
                 if (Int32.TryParse(btn.Content.ToString(), out n))
                 {
-                    string[] name = cn.Substring(1).Split("_");
+                    string[] name = cn.Substring(1).Split("R");
                     int col = Int32.Parse(name[0]);
                     int row = Int32.Parse(name[1]);
                     board[col - 1, row - 1] = n;
@@ -351,13 +368,19 @@ namespace Sudoku
         }
         private void selectCellDown(object sender, EventArgs e)
         {
-            Button btn = (Button)FindName(((Button)sender).Name);
+            string bn = ((Button)sender).Name;
+            Button btn = (Button)FindName(bn);
             btn.Content = I0.Content;
-            btn.Foreground = ((bool)(rdoQuestion.IsChecked)) ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+            int n = int.Parse(I0.Content.ToString());
+            bool qa = ((bool)rdoQuestion.IsChecked);
+            btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+            int idx = lstHistory.SelectedIndex;
+            numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
         }
         private void selectCellWheel(object sender, MouseWheelEventArgs e)
         {
-            Button btn = (Button)FindName(((Button)sender).Name);
+            string bn = ((Button)sender).Name;
+            Button btn = (Button)FindName(bn);
             int n;
             if (!Int32.TryParse(btn.Content.ToString(), out n))
             {
@@ -373,8 +396,13 @@ namespace Sudoku
                 n = 0;
             }
             btn.Content = n == 0 ? " " : n.ToString();
-            btn.Foreground = ((bool)(rdoQuestion.IsChecked)) ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+            bool qa = ((bool)rdoQuestion.IsChecked);
+            btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+
+            int idx = lstHistory.SelectedIndex;
+            numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
         }
+
         private void lstBoxSelect(object sender, EventArgs e)
         {
             int idx = (sender as ListBox).SelectedIndex;
@@ -383,10 +411,34 @@ namespace Sudoku
         private void deleteGame(object sender, EventArgs e)
         {
             int idx = lstHistory.SelectedIndex;
-            sblbl1.Content = idx.ToString();
-            numPlace.plays.RemoveAt(idx);
-            numPlace.SaveSudoku2(numPlace);
-            initView();
+            if (idx >= 0)
+            {
+                sblbl1.Content = idx.ToString();
+                numPlace.removePlay(idx);
+
+                var lst = numPlace.listGame();
+                lstHistory.ItemsSource = lst;
+                lstHistory.SelectedIndex = lst.Count - 1;
+            }
+        }
+        private void renameGame(object sender, EventArgs e)
+        {
+            int idx = lstHistory.SelectedIndex;
+            if (idx >= 0)
+            {
+                string title = "名称変更";
+                string td = numPlace.lookToday(idx);
+                string cap = Microsoft.VisualBasic.Interaction.InputBox("名称", title, td);
+                if (cap != "" && cap != td)
+                {
+                    numPlace.modifyCaption(idx, cap);
+
+                    List<string> list = numPlace.listGame();
+                    lstHistory.ItemsSource = null;
+                    lstHistory.ItemsSource = list;
+                    lstHistory.SelectedIndex = idx;
+                }
+            }
         }
     }
 }
