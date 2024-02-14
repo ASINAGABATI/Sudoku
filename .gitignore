@@ -1,7 +1,14 @@
+memo.txt
 
+.gitignore
 /.vs/
 /bin/
 /obj/
 
 *.png
 memo.txt
+./*.user
+*.csproj
+AssemblyInfo.cs
+Sudoku.csproj
+Sudoku.csproj.user
