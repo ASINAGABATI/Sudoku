@@ -359,6 +359,15 @@ namespace Sudoku
             Button lbl = (Button)sender;
 
             I0.Content = lbl.Content.ToString();
+            I0.Foreground = (bool)rdoQuestion.IsChecked ? (Brush)colorQuestion : (Brush)colorAnswer;
+        }
+        private void rdoI0Click(object sender, EventArgs e)
+        {
+            string bn = ((RadioButton)sender).Name;
+            RadioButton btn = (RadioButton)FindName(bn);
+
+            bool qa = ((bool)rdoQuestion.IsChecked);
+            I0.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
         }
 
         private void selectCellPreRBDown(object sender, MouseButtonEventArgs e)
@@ -401,6 +410,11 @@ namespace Sudoku
 
             int idx = lstHistory.SelectedIndex;
             numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
+
+            if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                I0.Content = btn.Content;
+            }
         }
 
         private void lstBoxSelect(object sender, EventArgs e)

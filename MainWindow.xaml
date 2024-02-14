@@ -68,10 +68,10 @@
                         <Label Name="I0" HorizontalAlignment="Center" Content="x" FontSize="40" Margin="0,0,0,0" />
                         <StackPanel>
                             <Viewbox Height="36">
-                                <RadioButton GroupName="rbg1" Name="rdoQuestion" Content="■" Foreground="Black" IsChecked="True" />
+                                <RadioButton GroupName="rbg1" Name="rdoQuestion" Content="■" Foreground="Black" Click="rdoI0Click" IsChecked="True" />
                             </Viewbox>
                             <Viewbox Height="36">
-                                <RadioButton GroupName="rbg1" Name="rdoAnswer" Content="■" Foreground="Red" />
+                                <RadioButton GroupName="rbg1" Name="rdoAnswer" Content="■" Foreground="Red" Click="rdoI0Click" />
                             </Viewbox>
                         </StackPanel>
                     </StackPanel>
@@ -135,7 +135,7 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="C9R1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="1" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
+                    <Button Name="C9R1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="0" Content="1" PreviewMouseRightButtonDown="selectCellPreRBDown"  Click="selectCellDown" MouseWheel="selectCellWheel" />
                     <Button Name="C8R1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="1" Content="2" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
                     <Button Name="C7R1" Style="{StaticResource FlatButton}" Grid.Row="0" Grid.Column="2" Content="3" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
                     <Button Name="C9R2" Style="{StaticResource FlatButton}" Grid.Row="1" Grid.Column="0" Content="4" PreviewMouseRightButtonDown="selectCellPreRBDown" Click="selectCellDown" MouseWheel="selectCellWheel" />
