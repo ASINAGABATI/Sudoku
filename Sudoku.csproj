@@ -6,21 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
-    <VersionPrefix>0.5.2</VersionPrefix>
+    <VersionPrefix>1.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <PackageIcon>floorBall4.png</PackageIcon>
     <Product>Hati数独</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="floorBall4.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\Documents\floorBall4.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <None Remove=".gitignore" />
+    <None Remove="README.md" />
   </ItemGroup>
 
   <ItemGroup>

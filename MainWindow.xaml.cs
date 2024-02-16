@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -166,6 +167,23 @@ namespace Sudoku
         private void btnSaveAddGame(object sender, EventArgs e)
         {
             save(-1);
+        }
+        private void btnNewGame(object sender, EventArgs e)
+        {
+            foreach (string a in Constants.CELLNAME)
+            {
+                object obj = FindName(a);
+                Button btn = (Button)obj;
+                btn.Content = " ";
+            }
+            backImage.ImageSource = null;
+            Play play = new();
+            play.today = DateTime.Now.ToString();
+            numPlace.updatePlay(-1, play);
+
+            var lst = numPlace.listGame();
+            lstHistory.ItemsSource = lst;
+            lstHistory.SelectedIndex = lst.Count - 1;
         }
         private void save(int k)
         {

@@ -54,6 +54,7 @@
                         <Button Content="Diagnose" Height="28" Margin="0,3,0,0" Click="btnDiagnose" />
                         <Button Content="SaveAs" Height="28" Margin="0,3,0,0" Click="btnSaveAsGame" />
                         <Button Content="SaveAdd" Height="28" Margin="0,3,0,0" Click="btnSaveAddGame" />
+                        <Button Content="New" Height="28" Margin="0,3,0,0" Click="btnNewGame" />
                     </StackPanel>
                 </Grid>
 
