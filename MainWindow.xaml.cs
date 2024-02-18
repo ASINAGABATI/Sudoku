@@ -70,7 +70,7 @@ namespace Sudoku
                 {
                     object obj = FindName(String.Format("C{0}R{1}", p.col.ToString(), p.row.ToString()) );
                     Button btn = (Button)obj;
-                    btn.Content = p.num.ToString();
+                    btn.Content = p.num > 0 ? p.num.ToString() : "";
                     btn.Foreground = p.cond == 0 ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
                 }
             }
@@ -214,6 +214,8 @@ namespace Sudoku
                     play.today = lstHistory.SelectedItem.ToString();
                 }
                 numPlace.updatePlay(k, play);
+                sblbl1.Content = " update " + play.today;
+
             }
             if (k == -1)
             {
@@ -388,6 +390,61 @@ namespace Sudoku
             I0.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
         }
 
+        private void selectCell_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string bn = ((Button)sender).Name;
+            Button btn = (Button)FindName(bn);
+            if (e.ClickCount > 0)
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    btn.Content = I0.Content;
+                    int n;
+                    if (int.TryParse(I0.Content.ToString(), out n))
+                    {
+                        bool qa = (bool)(rdoQuestion.IsChecked);
+                        btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+                        int idx = lstHistory.SelectedIndex;
+                        numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
+                    }
+                }
+                if (e.RightButton == MouseButtonState.Pressed)
+                {
+                    btn.Content = "";
+                }
+                if (e.MiddleButton == MouseButtonState.Pressed)
+                {
+                    I0.Content = btn.Content;
+
+                }
+            }
+        }
+        private void selectCell_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            string bn = ((Button)sender).Name;
+            Button btn = (Button)FindName(bn);
+            int n;
+            if (!Int32.TryParse(btn.Content.ToString(), out n))
+            {
+                n = 0;
+            }
+            n += e.Delta / Math.Abs(e.Delta);
+            if (n < 0)
+            {
+                n = 9;
+            }
+            else if (n > 9)
+            {
+                n = 0;
+            }
+            btn.Content = n == 0 ? " " : n.ToString();
+            bool qa = (bool)(rdoQuestion.IsChecked);
+            btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+
+            int idx = lstHistory.SelectedIndex;
+            numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
+        }
+
         private void selectCellPreRBDown(object sender, MouseButtonEventArgs e)
         {
             Button btn = (Button)FindName(((Button)sender).Name);
@@ -398,11 +455,14 @@ namespace Sudoku
             string bn = ((Button)sender).Name;
             Button btn = (Button)FindName(bn);
             btn.Content = I0.Content;
-            int n = int.Parse(I0.Content.ToString());
-            bool qa = ((bool)rdoQuestion.IsChecked);
-            btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
-            int idx = lstHistory.SelectedIndex;
-            numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
+            int n;
+            if (int.TryParse(I0.Content.ToString(), out n))
+            {
+                bool qa = ((bool)rdoQuestion.IsChecked);
+                btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+                int idx = lstHistory.SelectedIndex;
+                numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
+            }
         }
         private void selectCellWheel(object sender, MouseWheelEventArgs e)
         {
@@ -472,5 +532,6 @@ namespace Sudoku
                 }
             }
         }
+
     }
 }
