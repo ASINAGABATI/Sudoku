@@ -10,9 +10,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Sudoku
 {
+    enum GAME_TIMER
+    {
+        STOPPING, TIMEKEEPING, POUSE
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -24,6 +29,10 @@ namespace Sudoku
         private object colorAnswer;
         private object colorQuestion;
         private NumPlace numPlace;
+
+        readonly Stopwatch stopwatch = new Stopwatch();
+        readonly DispatcherTimer timer = new DispatcherTimer();
+        GAME_TIMER gt = GAME_TIMER.STOPPING;
 
         public MainWindow()
         {
@@ -48,7 +57,13 @@ namespace Sudoku
                 lstHistory.SelectedIndex = lst.Count - 1;
             }
             I0.Content = "";
+
+            timer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 1秒
+            timer.Tick += new EventHandler(TimerMethod);
+            timer.Start();
         }
+        
+
         protected virtual void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             numPlace.final();
@@ -213,10 +228,10 @@ namespace Sudoku
                 {
                     play.today = lstHistory.SelectedItem.ToString();
                 }
-                numPlace.updatePlay(k, play);
-                sblbl1.Content = " update " + play.today;
-
             }
+            numPlace.updatePlay(k, play);
+            sblbl1.Content = " update " + play.today;
+
             if (k == -1)
             {
                 initView();
@@ -229,8 +244,10 @@ namespace Sudoku
                 }
             }
         }
-        private void btnDiagnose(object sender, EventArgs e)
+        private void btnDiagnose(object sender, RoutedEventArgs e)
         {
+            string[] dlgmess = new string[] { "横に同じ値", "未回答がある", "縦に同一値" };
+
             int[,] board = new int[9, 9];
 
             foreach (var cn in Constants.CELLNAME)
@@ -274,7 +291,7 @@ namespace Sudoku
             }
             if (diag != 0)
             {
-                MessageBox.Show("Diagnose " + diag);
+                MessageBox.Show(dlgmess[diag - 1]);
                 return;
             }
             for (int col = 1; col <= 9; col++)
@@ -285,7 +302,7 @@ namespace Sudoku
                     int n = board[col - 1, row - 1];
                     if (vert.Contains(n))
                     {
-                        diag = 11;   // 縦に同一値
+                        diag = 3;   // 縦に同一値
                         break;
                     }
                     vert.Push(n);
@@ -294,8 +311,11 @@ namespace Sudoku
             }
             if (diag != 0)
             {
-                MessageBox.Show("Diagnose " + diag);
-                return;
+                MessageBox.Show("Diagnose " + dlgmess[diag - 1]);
+            }
+            else
+            {
+                sblbl1.Content = "正解";
             }
         }
         private void filePathToImageSource(string filePath)
@@ -396,7 +416,15 @@ namespace Sudoku
             Button btn = (Button)FindName(bn);
             if (e.ClickCount > 0)
             {
-                if (e.LeftButton == MouseButtonState.Pressed)
+                string s = Keyboard.IsKeyDown(Key.LeftShift) ? "Key.LeftShift" : "";
+                if (Keyboard.IsKeyDown(Key.RightShift)) s += " Key.RightShift";
+                if (Keyboard.IsKeyDown(Key.LeftAlt)) s += " Key.LeftAlt";
+                if (Keyboard.IsKeyDown(Key.RightAlt)) s += " Key.RightAlt";
+                sblbl2.Content = s;
+
+                if (e.ClickCount != 1) return;
+
+                if (e.LeftButton == MouseButtonState.Pressed && !(Keyboard.IsKeyDown(Key.LeftShift)) )
                 {
                     btn.Content = I0.Content;
                     int n;
@@ -412,10 +440,9 @@ namespace Sudoku
                 {
                     btn.Content = "";
                 }
-                if (e.MiddleButton == MouseButtonState.Pressed)
+                if ( Keyboard.IsKeyDown(Key.LeftShift) || e.MiddleButton == MouseButtonState.Pressed)
                 {
                     I0.Content = btn.Content;
-
                 }
             }
         }
@@ -533,5 +560,51 @@ namespace Sudoku
             }
         }
 
+        private void TimerMethod(object sender, EventArgs e)
+        {
+            var result = stopwatch.Elapsed;
+            sblbltimer.Content = result.Minutes.ToString("00") + "m " + result.Seconds.ToString("00") + "s";
+        }
+        private void sbbtn_start_Click(object sender, RoutedEventArgs e)
+        {
+            switch(gt)
+            {
+                case GAME_TIMER.STOPPING:
+                    stopwatch.Start();
+                    gt = GAME_TIMER.TIMEKEEPING;
+                    timer.Start();
+                    break;
+                case GAME_TIMER.TIMEKEEPING:
+                    stopwatch.Stop();
+                    gt = GAME_TIMER.POUSE;
+                    timer.Stop();
+                    break;
+                case GAME_TIMER.POUSE:
+                    stopwatch.Start();
+                    gt = GAME_TIMER.TIMEKEEPING;
+                    timer.Start();
+                    break;
+            }
+            sblbl1.Content = "●" + gt.ToString();
+        }
+        private void sbbtn_reset_Click(object sender, RoutedEventArgs e)
+        {
+            switch (gt)
+            {
+                case GAME_TIMER.STOPPING:
+                    break;
+                case GAME_TIMER.TIMEKEEPING:
+                    stopwatch.Restart();
+                    timer.Start();
+                    break;
+                case GAME_TIMER.POUSE:
+                    timer.Stop();
+                    sblbltimer.Content = "00 min 00 sec";
+                    stopwatch.Reset();
+                    gt = GAME_TIMER.STOPPING;
+                    break;
+            }
+            sblbl1.Content = "■" + gt.ToString();
+        }
     }
 }

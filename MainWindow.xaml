@@ -385,6 +385,10 @@
                 <Label Name="sblbl1" Content="" Foreground="Blue" Width="300" />
                 <Separator/>
                 <Label Name="sblbl2" Content="" />
+
+                <Button Name="sbbtn_start" Content="●" Foreground="Blue" Background="LightGray" FontSize="16" BorderBrush="LightGray" BorderThickness="0.0" Click="sbbtn_start_Click" />
+                <Label Name="sblbltimer" Content="00 min 00 sec" />
+                <Button Name="sbbtn_reset" Content="■" Foreground="Red" Background="LightGray" FontSize="14" BorderBrush="LightGray" BorderThickness="0.0" Click="sbbtn_reset_Click" />
             </StatusBar>
         </Grid>
         
