@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sudoku": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\gon_j\\github\\sudoku"
+    }
+  }
+}
