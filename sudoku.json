@@ -3606,8 +3606,1488 @@
       ]
     },
     {
-      "today": "",
-      "squares": []
+      "today": "2024.3.12\u5915\u520A",
+      "squares": [
+        {
+          "col": 9,
+          "row": 1,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 1,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 1,
+          "num": 6,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 1,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 1,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 4,
+          "row": 1,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 1,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 1,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 1,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 2,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 2,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 2,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 2,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 2,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 2,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 2,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 2,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 2,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 3,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 3,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 3,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 3,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 3,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 3,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 3,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 3,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 3,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 4,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 4,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 4,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 4,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 4,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 4,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 4,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 4,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 4,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 5,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 5,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 5,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 5,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 5,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 5,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 5,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 5,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 5,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 6,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 6,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 6,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 6,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 6,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 6,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 6,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 6,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 6,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 7,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 7,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 7,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 7,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 7,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 7,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 7,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 7,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 7,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 8,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 8,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 8,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 8,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 8,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 8,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 8,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 8,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 8,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 9,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 9,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 9,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 9,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 9,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 4,
+          "row": 9,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 9,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 9,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 9,
+          "num": 2,
+          "cond": 1
+        }
+      ]
+    },
+    {
+      "today": "ttestv1.1",
+      "squares": [
+        {
+          "col": 9,
+          "row": 1,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 1,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 1,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 2,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 2,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 2,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 3,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 3,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 3,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 1,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 1,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 1,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 2,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 2,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 4,
+          "row": 2,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 3,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 3,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 3,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 1,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 1,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 1,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 2,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 2,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 2,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 3,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 3,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 3,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 4,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 4,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 4,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 5,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 5,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 5,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 6,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 6,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 6,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 4,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 4,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 4,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 5,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 5,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 5,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 6,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 6,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 6,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 4,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 4,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 4,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 5,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 5,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 5,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 6,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 6,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 6,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 7,
+          "num": 6,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 7,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 7,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 8,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 8,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 8,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 9,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 9,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 9,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 7,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 7,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 7,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 8,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 8,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 4,
+          "row": 8,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 9,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 9,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 9,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 7,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 7,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 7,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 8,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 8,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 8,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 9,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 9,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 9,
+          "num": 4,
+          "cond": 1
+        }
+      ]
+    },
+    {
+      "today": "2024/03/18 3/16\u4E2D",
+      "squares": [
+        {
+          "col": 9,
+          "row": 1,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 1,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 1,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 2,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 2,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 2,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 3,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 3,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 3,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 1,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 1,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 1,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 2,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 2,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 2,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 3,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 3,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 4,
+          "row": 3,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 1,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 1,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 1,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 2,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 2,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 2,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 3,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 3,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 3,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 4,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 4,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 4,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 5,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 5,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 5,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 6,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 6,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 6,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 4,
+          "num": 2,
+          "cond": 0
+        },
+        {
+          "col": 5,
+          "row": 4,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 4,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 5,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 5,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 5,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 6,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 6,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 6,
+          "num": 9,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 4,
+          "num": 8,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 4,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 4,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 5,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 5,
+          "num": 7,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 5,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 6,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 6,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 6,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 7,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 7,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 7,
+          "num": 1,
+          "cond": 0
+        },
+        {
+          "col": 9,
+          "row": 8,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 8,
+          "row": 8,
+          "num": 6,
+          "cond": 0
+        },
+        {
+          "col": 7,
+          "row": 8,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 9,
+          "row": 9,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 8,
+          "row": 9,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 7,
+          "row": 9,
+          "num": 4,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 7,
+          "num": 8,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 7,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 4,
+          "row": 7,
+          "num": 3,
+          "cond": 0
+        },
+        {
+          "col": 6,
+          "row": 8,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 8,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 8,
+          "num": 5,
+          "cond": 1
+        },
+        {
+          "col": 6,
+          "row": 9,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 5,
+          "row": 9,
+          "num": 6,
+          "cond": 1
+        },
+        {
+          "col": 4,
+          "row": 9,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 7,
+          "num": 7,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 7,
+          "num": 2,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 7,
+          "num": 6,
+          "cond": 0
+        },
+        {
+          "col": 3,
+          "row": 8,
+          "num": 4,
+          "cond": 0
+        },
+        {
+          "col": 2,
+          "row": 8,
+          "num": 1,
+          "cond": 1
+        },
+        {
+          "col": 1,
+          "row": 8,
+          "num": 3,
+          "cond": 1
+        },
+        {
+          "col": 3,
+          "row": 9,
+          "num": 9,
+          "cond": 1
+        },
+        {
+          "col": 2,
+          "row": 9,
+          "num": 5,
+          "cond": 0
+        },
+        {
+          "col": 1,
+          "row": 9,
+          "num": 8,
+          "cond": 1
+        }
+      ]
+    },
+    {
+      "today": "2024/03/18 15:01:02",
+      "squares": [
+        {
+          "col": 9,
+          "row": 6,
+          "num": 5,
+          "cond": 1
+        }
+      ]
     }
   ]
 }

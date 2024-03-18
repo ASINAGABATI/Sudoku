@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <VersionPrefix>1.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <PackageIcon>floorBall4.png</PackageIcon>
     <Product>Hati数独</Product>

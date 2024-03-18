@@ -26,8 +26,8 @@ namespace Sudoku
         private Button? submit1;
 
         private Button? clear;
-        private object colorAnswer;
-        private object colorQuestion;
+        private Brush colorAnswer;
+        private Brush colorQuestion;
         private NumPlace numPlace;
 
         readonly Stopwatch stopwatch = new Stopwatch();
@@ -73,75 +73,18 @@ namespace Sudoku
         {
             Play play = numPlace.loadPlay(index);
             backImage.ImageSource = null;
-            foreach (string a in Constants.CELLNAME)
-            {
-                object obj = FindName(a);
-                Button btn = (Button)obj;
-                btn.Content = " ";
-            }
+            board.enableBackimage(false);
+
+            board.ClearButton();
             if (play.squares.Count > 0)
             {
                 foreach (var p in play.squares)
                 {
-                    object obj = FindName(String.Format("C{0}R{1}", p.col.ToString(), p.row.ToString()) );
-                    Button btn = (Button)obj;
-                    btn.Content = p.num > 0 ? p.num.ToString() : "";
-                    btn.Foreground = p.cond == 0 ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+                    board.setButtonProp(p.row, p.col, p.num > 0 ? p.num.ToString() : "", p.cond == 0 ? (Brush)(colorQuestion) : (Brush)(colorAnswer));
                 }
             }
         }
 
-        //private void CreateControls()
-        //{
-        //    firstNameLabel = new();
-        //    firstNameLabel.Content = "Enter your first name:";
-        //    grid1.Children.Add(firstNameLabel);
-
-        //    firstName = new TextBox();
-        //    firstName.Margin = new Thickness(0, 5, 10, 5);
-        //    Grid.SetColumn(firstName, 1);
-        //    grid1.Children.Add(firstName);
-
-        //    lastNameLabel = new Label();
-        //    lastNameLabel.Content = "Enter your last name:";
-        //    Grid.SetRow(lastNameLabel, 1);
-        //    grid1.Children.Add(lastNameLabel);
-
-        //    lastName = new TextBox();
-        //    lastName.Margin = new Thickness(0, 5, 10, 5);
-        //    Grid.SetColumn(lastName, 1);
-        //    Grid.SetRow(lastName, 1);
-        //    grid1.Children.Add(lastName);
-
-        //    submit = new Button();
-        //    submit.Content = "View message";
-        //    Grid.SetRow(submit, 2);
-        //    grid1.Children.Add(submit);
-
-        //    clear = new Button();
-        //    clear.Content = "Clear Name";
-        //    //clear.Style = "{StaticResource GradButton}";
-        //    Grid.SetRow(clear, 2);
-        //    Grid.SetColumn(clear, 1);
-        //    grid1.Children.Add(clear);
-        //}
-        //private void createButton()
-        //{
-        //    LinearGradientBrush buttonBrush = new LinearGradientBrush();
-        //    buttonBrush.StartPoint = new Point(0, 0.5);
-        //    buttonBrush.EndPoint = new Point(1, 0.5);
-        //    buttonBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0));
-        //    buttonBrush.GradientStops.Add(new GradientStop(Colors.White, 0.9));
-
-        //    submit1 = new Button();
-        //    submit1.Content = "View message";
-        //    Grid.SetRow(submit1, 3);
-        //    grid1.Children.Add(submit1);
-
-        //    submit1.Background = buttonBrush;
-        //    submit1.FontSize = 14;
-        //    submit1.FontWeight = FontWeights.Bold;
-        //}
 
         private void btnGetImage(object sender, EventArgs e)
         {
@@ -163,6 +106,7 @@ namespace Sudoku
                 bi.EndInit();
                 bi.Freeze();
                 backImage.ImageSource = cnv(bi);
+                board.enableBackimage();
             }
         }
         private void btnSaveAsGame(object sender, EventArgs e)
@@ -185,13 +129,10 @@ namespace Sudoku
         }
         private void btnNewGame(object sender, EventArgs e)
         {
-            foreach (string a in Constants.CELLNAME)
-            {
-                object obj = FindName(a);
-                Button btn = (Button)obj;
-                btn.Content = " ";
-            }
+            board.ClearButton();
+
             backImage.ImageSource = null;
+            board.enableBackimage();
             Play play = new();
             play.today = DateTime.Now.ToString();
             numPlace.updatePlay(-1, play);
@@ -203,21 +144,20 @@ namespace Sudoku
         private void save(int k)
         {
             Play play = new();
-            foreach (var cn in Constants.CELLNAME)
+            List<Kifu> ban = board.getBanmen(colorAnswer);
+            if (ban.Count > 0)
             {
-                Button btn = (Button)FindName(cn);
-                Int32 n;
-                if (Int32.TryParse(btn.Content.ToString(), out n))
+                foreach(Kifu kifu in ban)
                 {
-                    string[] name = btn.Name.Substring(1).Split("R");
-                    var g = new Square();
-                    g.col = Int32.Parse(name[0]);
-                    g.row = Int32.Parse(name[1]);
-                    g.num = n;
-                    g.cond = btn.Foreground == (Brush)(colorQuestion) ? 0 : 1;
-                    play.squares.Add(g);
+                    Square sq = new();
+                    sq.row = kifu.row;
+                    sq.col = kifu.col;
+                    sq.num = Math.Abs( kifu.ope);
+                    sq.cond = kifu.ope > 0 ? 1 : 0;
+                    play.squares.Add(sq);
                 }
             }
+
             if (play.squares.Count > 0)
             {
                 if( k == -1)
@@ -248,20 +188,14 @@ namespace Sudoku
         {
             string[] dlgmess = new string[] { "横に同じ値", "未回答がある", "縦に同一値" };
 
-            int[,] board = new int[9, 9];
+            int[,] ban = new int[9, 9];
 
-            foreach (var cn in Constants.CELLNAME)
+            List<Kifu> bamen = board.getBanmen(colorAnswer);
+            if (bamen.Count > 0)
             {
-                object obj = FindName(cn);
-                Button btn = (Button)obj;
-                int n;
-                if (Int32.TryParse(btn.Content.ToString(), out n))
+                foreach (Kifu kifu in bamen)
                 {
-                    string[] name = cn.Substring(1).Split("R");
-                    int col = Int32.Parse(name[0]);
-                    int row = Int32.Parse(name[1]);
-                    board[col - 1, row - 1] = n;
-                    Debug.WriteLine(btn.Content.ToString() + " color:" + btn.Foreground.ToString() + " " + col + " " + row + " " + n);
+                    ban[kifu.col - 1, kifu.row - 1] = kifu.ope;
                 }
             }
 
@@ -271,7 +205,7 @@ namespace Sudoku
                 Stack<int> hori = new Stack<int>();
                 for (int col = 1; col <= 9; col++)
                 {
-                    int n = board[col - 1, row - 1];
+                    int n = ban[col - 1, row - 1];
                     if (n != 0)
                     {
                         if (hori.Contains(n))
@@ -299,7 +233,7 @@ namespace Sudoku
                 Stack<int> vert = new Stack<int>();
                 for (int row = 1; row <= 9; row++)
                 {
-                    int n = board[col - 1, row - 1];
+                    int n = ban[col - 1, row - 1];
                     if (vert.Contains(n))
                     {
                         diag = 3;   // 縦に同一値
@@ -334,6 +268,7 @@ namespace Sudoku
                 bi.Freeze();
 
                 backImage.ImageSource = cnv(bi);
+                board.enableBackimage();
             }
             catch(Exception ex)
             {
@@ -372,27 +307,15 @@ namespace Sudoku
         private void btnEraseImage(object sender, EventArgs e)
         {
             backImage.ImageSource = null;
+            board.enableBackimage(false);
         }
         private void btnResetItem(object sender, EventArgs e)
         {
-            foreach (string a in Constants.CELLNAME)
-            {
-                object obj = FindName(a);
-                Button btn = (Button)obj;
-                if (btn.Foreground == (Brush)colorAnswer)
-                {
-                    btn.Content = " ";
-                }
-            }
+            board.ClearButton(colorAnswer);
         }
         private void btnEraseItem(object sender, EventArgs e)
         {
-            foreach(string a in Constants.CELLNAME)
-            {
-                object obj = FindName(a);
-                Button btn = (Button)obj;
-                btn.Content = " ";
-            }
+            board.ClearButton();
         }
         private void btnNumberItem(object sender, EventArgs e)
         {
@@ -408,118 +331,6 @@ namespace Sudoku
 
             bool qa = ((bool)rdoQuestion.IsChecked);
             I0.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
-        }
-
-        private void selectCell_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            string bn = ((Button)sender).Name;
-            Button btn = (Button)FindName(bn);
-            if (e.ClickCount > 0)
-            {
-                string s = Keyboard.IsKeyDown(Key.LeftShift) ? "Key.LeftShift" : "";
-                if (Keyboard.IsKeyDown(Key.RightShift)) s += " Key.RightShift";
-                if (Keyboard.IsKeyDown(Key.LeftAlt)) s += " Key.LeftAlt";
-                if (Keyboard.IsKeyDown(Key.RightAlt)) s += " Key.RightAlt";
-                sblbl2.Content = s;
-
-                if (e.ClickCount != 1) return;
-
-                if (e.LeftButton == MouseButtonState.Pressed && !(Keyboard.IsKeyDown(Key.LeftShift)) )
-                {
-                    btn.Content = I0.Content;
-                    int n;
-                    if (int.TryParse(I0.Content.ToString(), out n))
-                    {
-                        bool qa = (bool)(rdoQuestion.IsChecked);
-                        btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
-                        int idx = lstHistory.SelectedIndex;
-                        numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
-                    }
-                }
-                if (e.RightButton == MouseButtonState.Pressed)
-                {
-                    btn.Content = "";
-                }
-                if ( Keyboard.IsKeyDown(Key.LeftShift) || e.MiddleButton == MouseButtonState.Pressed)
-                {
-                    I0.Content = btn.Content;
-                }
-            }
-        }
-        private void selectCell_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            string bn = ((Button)sender).Name;
-            Button btn = (Button)FindName(bn);
-            int n;
-            if (!Int32.TryParse(btn.Content.ToString(), out n))
-            {
-                n = 0;
-            }
-            n += e.Delta / Math.Abs(e.Delta);
-            if (n < 0)
-            {
-                n = 9;
-            }
-            else if (n > 9)
-            {
-                n = 0;
-            }
-            btn.Content = n == 0 ? " " : n.ToString();
-            bool qa = (bool)(rdoQuestion.IsChecked);
-            btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
-
-            int idx = lstHistory.SelectedIndex;
-            numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
-        }
-
-        private void selectCellPreRBDown(object sender, MouseButtonEventArgs e)
-        {
-            Button btn = (Button)FindName(((Button)sender).Name);
-            btn.Content = "";
-        }
-        private void selectCellDown(object sender, EventArgs e)
-        {
-            string bn = ((Button)sender).Name;
-            Button btn = (Button)FindName(bn);
-            btn.Content = I0.Content;
-            int n;
-            if (int.TryParse(I0.Content.ToString(), out n))
-            {
-                bool qa = ((bool)rdoQuestion.IsChecked);
-                btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
-                int idx = lstHistory.SelectedIndex;
-                numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
-            }
-        }
-        private void selectCellWheel(object sender, MouseWheelEventArgs e)
-        {
-            string bn = ((Button)sender).Name;
-            Button btn = (Button)FindName(bn);
-            int n;
-            if (!Int32.TryParse(btn.Content.ToString(), out n))
-            {
-                n = 0;
-            }
-            n += e.Delta / Math.Abs(e.Delta);
-            if (n < 0)
-            {
-                n = 9;
-            }
-            else if (n > 9)
-            {
-                n = 0;
-            }
-            btn.Content = n == 0 ? " " : n.ToString();
-            bool qa = ((bool)rdoQuestion.IsChecked);
-            btn.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
-
-            int idx = lstHistory.SelectedIndex;
-            numPlace.updateCell(idx, bn, n, (qa ? 0 : 1));
-
-            if (e.MiddleButton == MouseButtonState.Pressed)
-            {
-                I0.Content = btn.Content;
-            }
         }
 
         private void lstBoxSelect(object sender, EventArgs e)
@@ -605,6 +416,79 @@ namespace Sudoku
                     break;
             }
             sblbl1.Content = "■" + gt.ToString();
+        }
+
+        private void board_ButtonClick(int row, int col)
+        {
+            sblbl2.Content = "click event row:" + row.ToString() + " ,col:" + col.ToString();
+        }
+
+        private void board_uc9x9MouseWheelEvent(int row, int col, string content, int delta, bool leftButton, bool rightButton, bool middleButton)
+        {
+            sblbl1.Content = "mouse wheel event Delta:" + delta.ToString() + " ,lBtn:" + leftButton.ToString() +
+                " ,rBtn:" + rightButton.ToString() + " ,mBtn:" + middleButton.ToString();
+
+            int n;
+            if (!Int32.TryParse(content, out n))
+            {
+                n = 0;
+            }
+            n += delta / Math.Abs(delta);
+            if (n < 0)
+            {
+                n = 9;
+            }
+            else if (n > 9)
+            {
+                n = 0;
+            }
+            bool qa = (bool)(rdoQuestion.IsChecked);
+            Brush brush = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
+            board.setButtonProp(row, col, n.ToString(), brush);
+
+            int idx = lstHistory.SelectedIndex;
+            numPlace.updateCell(idx, row, col, n, (qa ? 0 : 1));
+        }
+
+        private void board_uc9x9PreviewMouseEvent(int row, int col, int count, bool left, bool right, bool middle)
+        {
+            sblbl1.Content = "preview mouse row:" + row.ToString() + " col:" + col.ToString() + " ,Count:" + count.ToString() + " ,lBtn:" + left.ToString() +
+                " ,rBtn:" + right.ToString() + " ,mBtn:" + middle.ToString();
+
+            if (count > 0)
+            {
+                string s = Keyboard.IsKeyDown(Key.LeftShift) ? "Key.LeftShift" : "";
+                if (Keyboard.IsKeyDown(Key.RightShift)) s += " Key.RightShift";
+                if (Keyboard.IsKeyDown(Key.LeftAlt)) s += " Key.LeftAlt";
+                if (Keyboard.IsKeyDown(Key.RightAlt)) s += " Key.RightAlt";
+                sblbl2.Content = s;
+
+                if (count != 1) return;
+
+                if (left && !(Keyboard.IsKeyDown(Key.LeftShift)))
+                {
+                    board.setButtonProp(row, col, I0.Content.ToString());
+                    int n;
+                    if (int.TryParse(I0.Content.ToString(), out n))
+                    {
+                        bool qa = (bool)(rdoQuestion.IsChecked);
+                        board.setButtonProp(row, col, null, qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer));
+                        int idx = lstHistory.SelectedIndex;
+                        numPlace.updateCell(idx, row, col, n, (qa ? 0 : 1));
+                    }
+                }
+                if (right)
+                {
+                    board.setButtonProp(row, col, "");
+                }
+                if (Keyboard.IsKeyDown(Key.LeftShift) || middle)
+                {
+                    string? content="";
+                    Brush? color=null;
+                    board.getButtonProp(row, col, ref content, ref color);
+                    I0.Content = content;
+                }
+            }
         }
     }
 }
