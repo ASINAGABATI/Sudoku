@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Sudoku"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="250">
-    <Grid Name="board" Background="Red">
+    <Grid x:Name="board9x9" Background="Transparent">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />

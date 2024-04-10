@@ -10,7 +10,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using System.Xml.Linq;
 
 namespace Sudoku
 {
@@ -149,12 +151,7 @@ namespace Sudoku
             {
                 foreach(Kifu kifu in ban)
                 {
-                    Square sq = new();
-                    sq.row = kifu.row;
-                    sq.col = kifu.col;
-                    sq.num = Math.Abs( kifu.ope);
-                    sq.cond = kifu.ope > 0 ? 1 : 0;
-                    play.squares.Add(sq);
+                    play.squares.Add( new Square() {row = kifu.row, col = kifu.col, num = Math.Abs(kifu.num), cond = kifu.num > 0 ? 1 : 0 } );
                 }
             }
 
@@ -184,6 +181,23 @@ namespace Sudoku
                 }
             }
         }
+        private async void btnAnswer(object sender, RoutedEventArgs e)
+        {
+            var dlg = new DialogProgress();
+            dlg.banmen = board.getBanmen(colorAnswer);
+            dlg.Owner = this;
+            dlg.ShowDialog();
+            if (dlg.result == 1)
+            {
+                foreach (var item in dlg.resultList)
+                {
+                    board.setButtonProp(item.row + 1, 9 - item.col, item.num.ToString(), (Brush)(colorAnswer) );
+                    int idx = lstHistory.SelectedIndex;
+                    numPlace.updateCell(idx, item.row + 1, 9 - item.col, item.num, 1);
+                }
+
+            }
+        }
         private void btnDiagnose(object sender, RoutedEventArgs e)
         {
             string[] dlgmess = new string[] { "横に同じ値", "未回答がある", "縦に同一値" };
@@ -195,7 +209,7 @@ namespace Sudoku
             {
                 foreach (Kifu kifu in bamen)
                 {
-                    ban[kifu.col - 1, kifu.row - 1] = kifu.ope;
+                    ban[kifu.col - 1, kifu.row - 1] = kifu.num;
                 }
             }
 
@@ -268,6 +282,7 @@ namespace Sudoku
                 bi.Freeze();
 
                 backImage.ImageSource = cnv(bi);
+                
                 board.enableBackimage();
             }
             catch(Exception ex)
@@ -303,6 +318,21 @@ namespace Sudoku
 
             return inversedBitmap;
         }
+        private BitmapSource backColor(int w, int h)
+        {
+            byte[] inversedPixcels = new byte[w * h * 4];
+            int stride = w * 32 / 8;
+            for (int x = 0; x < w*h*4; x = x + 4)
+            {
+                inversedPixcels[x] = (byte)(255);
+                inversedPixcels[x + 1] = 128;
+                inversedPixcels[x + 2] = 0;
+                inversedPixcels[x + 3] = 0;
+            }
+            BitmapSource inversedBitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Pbgra32, null, inversedPixcels, stride);
+
+            return inversedBitmap;
+        }
 
         private void btnEraseImage(object sender, EventArgs e)
         {
@@ -329,13 +359,13 @@ namespace Sudoku
             string bn = ((RadioButton)sender).Name;
             RadioButton btn = (RadioButton)FindName(bn);
 
-            bool qa = ((bool)rdoQuestion.IsChecked);
+            bool qa = (bool)rdoQuestion.IsChecked;
             I0.Foreground = qa ? (Brush)(colorQuestion) : (Brush)(colorAnswer);
         }
 
         private void lstBoxSelect(object sender, EventArgs e)
         {
-            int idx = (sender as ListBox).SelectedIndex;
+            int idx = ((ListBox)sender).SelectedIndex;
             initView(idx);
         }
         private void deleteGame(object sender, EventArgs e)
@@ -483,10 +513,8 @@ namespace Sudoku
                 }
                 if (Keyboard.IsKeyDown(Key.LeftShift) || middle)
                 {
-                    string? content="";
-                    Brush? color=null;
-                    board.getButtonProp(row, col, ref content, ref color);
-                    I0.Content = content;
+                    Tuple<string, Brush> r = board.getButtonProp(row, col);
+                    I0.Content = r.Item1;
                 }
             }
         }

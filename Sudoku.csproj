@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
-    <VersionPrefix>1.1</VersionPrefix>
+    <VersionPrefix>1.1.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <PackageIcon>floorBall4.png</PackageIcon>
     <Product>Hati数独</Product>
@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="README.md" />
+    <None Remove="sudoku.json" />
   </ItemGroup>
 
   <ItemGroup>

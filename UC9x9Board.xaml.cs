@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -12,12 +13,12 @@ namespace Sudoku
 {
     public class Kifu
     {
-        public int row; // 段 上から 0,1,2,...8 (一,二,...,九)
-        public int col; // 筋 左から 0,1,2,...8 (１,２,...,９)
-        public int ope;
+        public int row; // 段 上から 1,2,...8,9 (一,二,...,九)
+        public int col; // 筋 左から 1,2,...8,9 (１,２,...,９)
+        public int num;
 
-        public Kifu() { row = -1; col = -1; ope = -1; }
-        public Kifu(int r, int c, int o) { row = r; col = c; ope = o; }
+        public Kifu() { row = -1; col = -1; num = -1; }
+        public Kifu(int r, int c, int o) { row = r; col = c; num = o; }
     }
 
     /// <summary>
@@ -30,42 +31,43 @@ namespace Sudoku
         private System.Windows.Media.Color gridBackcolor0 = Colors.WhiteSmoke;
         private System.Windows.Media.Color gridBackcolor1 = Colors.Gainsboro;
 
-        public Kifu Bante
-        {
-            get => (Kifu)GetValue(NextBante);
-            set
-            {
-                SetValue(NextBante, value);
+        //// 依存関係プロパティのラッパープロパティ
+        //public Kifu Bante
+        //{
+        //    get => (Kifu)GetValue(NextBanteProperty);
+        //    set
+        //    {
+        //        SetValue(NextBanteProperty, value);
 
-                OnPropertyChanged(value);
-            }
-        }
-        public static readonly DependencyProperty NextBante =
-            DependencyProperty.Register(nameof(Bante), typeof(Kifu), typeof(UC9x9Board), new PropertyMetadata(new Kifu(0, 0, 0)));
+        //        OnPropertyChanged(value);
+        //    }
+        //}
+        //public static readonly DependencyProperty NextBanteProperty =
+        //    DependencyProperty.Register(nameof(Bante), typeof(Kifu), typeof(UC9x9Board), new PropertyMetadata(new Kifu(0, 0, 0)));
 
-        protected void OnPropertyChanged(Kifu k)
-        {
-            int grow = k.row / 3;
-            int gcol = k.col / 3;
-            string gn = "Para" + grow.ToString() + gcol.ToString();
-            Grid grid = (Grid)FindName(gn);
+        //protected void OnPropertyChanged(Kifu k)
+        //{
+        //    int grow = k.row / 3;
+        //    int gcol = k.col / 3;
+        //    string gn = "Para" + grow.ToString() + gcol.ToString();
+        //    Grid grid = (Grid)FindName(gn);
 
-            string n = "b" + k.row.ToString() + "_" + k.col.ToString();
-            Button btn = (Button)grid.Children[(k.row % 3) * 3 + k.col % 3];
+        //    string n = "b" + k.row.ToString() + "_" + k.col.ToString();
+        //    Button btn = (Button)grid.Children[(k.row % 3) * 3 + k.col % 3];
 
-            btn.Content = k.ope.ToString();
-            var color = Colors.DarkBlue;
-            btn.Foreground = new SolidColorBrush(color);
-        }
+        //    btn.Content = k.ope.ToString();
+        //    var color = Colors.DarkBlue;
+        //    btn.Foreground = new SolidColorBrush(color);
+        //}
 
         public UC9x9Board()
         {
             InitializeComponent();
 
-            board.Background = new SolidColorBrush(Colors.Transparent);
+            board9x9.Background = new SolidColorBrush(Colors.Transparent);
 
-            int cols = (int)Math.Ceiling(board.ColumnDefinitions.Count / 2.0);
-            int rows = (int)Math.Ceiling(board.RowDefinitions.Count / 2.0);
+            int cols = (int)Math.Ceiling(board9x9.ColumnDefinitions.Count / 2.0);
+            int rows = (int)Math.Ceiling(board9x9.RowDefinitions.Count / 2.0);
 
             for (int grow = 0; grow < rows; grow++)
             {
@@ -158,7 +160,7 @@ namespace Sudoku
                 btn.Foreground = color;
             }
         }
-        public void getButtonProp(int row, int col, ref string? content, ref Brush? color)
+        public Tuple<string, Brush> getButtonProp(int row, int col)
         {
             int sr = row - 1;
             int sc = 9 - col;
@@ -167,8 +169,10 @@ namespace Sudoku
             string gn = "Para" + grow.ToString() + gcol.ToString();
             Grid grid = (Grid)FindName(gn);
             Button btn = (Button)grid.Children[(sr % 3) * 3 + sc % 3];
-            if (content != null) content = btn.Content.ToString();
-            if (color != null) color = btn.Foreground;
+
+            string content = (string)btn.Content;
+            Brush color = btn.Foreground;
+            return new Tuple<string, Brush>(content, color);
         }
         public List<Kifu> getBanmen(Brush answerColor)
         {
@@ -181,17 +185,21 @@ namespace Sudoku
                     Grid grid = (Grid)FindName(gn);
                     for (int gcr = 0; gcr < 3; gcr++)
                     {
+                        int row = pr * 3 + gcr;
+
                         for (int gcc = 0; gcc < 3; gcc++)
                         {
-                            Button btn = (Button)grid.Children[(gcr % 3) * 3 + gcc % 3];
+                            int col = pc * 3 + gcc;
+
+                            Button btn = (Button)grid.Children[gcr * 3 + gcc];
                             int n;
                             if (Int32.TryParse(btn.Content.ToString(), out n))
                             {
-                                Kifu kifu = new Kifu();
-                                kifu.row = pr * 3 + gcr + 1;
-                                kifu.col = 9 - pc * 3 - gcc;
-                                if (btn.Foreground != answerColor) n *= -1;
-                                kifu.ope = n;
+                                if (btn.Foreground != answerColor)
+                                {
+                                    n *= -1;
+                                }
+                                Kifu kifu = new Kifu() { row = pr * 3 + gcr + 1, col = 9 - pc * 3 - gcc, num = n };
                                 all.Add(kifu);
                             }
                         }
@@ -209,7 +217,7 @@ namespace Sudoku
                 {
                     string gn = "Para" + pr.ToString() + pc.ToString();
                     Grid grid = (Grid)FindName(gn);
-                    grid.Background = new SolidColorBrush(v ? Colors.Transparent : gridColor(pr, pc) );
+                    grid.Background = new SolidColorBrush(v ? Colors.Transparent : gridColor(pr, pc));
                 }
             }
         }
