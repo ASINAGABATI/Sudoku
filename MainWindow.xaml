@@ -51,7 +51,7 @@
                         <Button Content="消す" Height="28" Margin="0,3,0,0" Click="btnEraseItem" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
-                        <Button Content="回答" Height="28" Margin="0,3,0,0" Click="btnAnswer"/>
+                        <Button Content="解答" Height="28" Margin="0,3,0,0" Click="btnAnswer"/>
                         <Button Content="診断" Height="28" Margin="0,3,0,0" Click="btnDiagnose" />
                         <Button Content="保存" Height="28" Margin="0,3,0,0" Click="btnSaveAsGame" />
                         <Button Content="追加保存" Height="28" Margin="0,3,0,0" Click="btnSaveAddGame" />
