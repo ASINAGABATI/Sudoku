@@ -10,12 +10,6 @@
     <Window.Resources>
     </Window.Resources>
 
-    <!--<Window.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="Erease" />
-        </ContextMenu>
-    </Window.ContextMenu>-->
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -33,8 +27,8 @@
 
             <Grid Grid.Column="0" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30*" />
-                    <RowDefinition Height="60*" />
+                    <RowDefinition Height="36*" />
+                    <RowDefinition Height="54*" />
                     <RowDefinition Height="4*" />
                 </Grid.RowDefinitions>
 
@@ -49,6 +43,7 @@
                         <Button Content="画像を消す" Height="28" Margin="0,3,0,0" Click="btnEraseImage" />
                         <Button Content="回答を消す" Height="28" Margin="0,3,0,0" Click="btnResetItem" />
                         <Button Content="消す" Height="28" Margin="0,3,0,0" Click="btnEraseItem" />
+                        <Button Content="Exit" Height="28" Margin="0,3,0,0" Click="btnExit" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
                         <Button Content="解答" Height="28" Margin="0,3,0,0" Click="btnAnswer"/>
@@ -56,6 +51,7 @@
                         <Button Content="保存" Height="28" Margin="0,3,0,0" Click="btnSaveAsGame" />
                         <Button Content="追加保存" Height="28" Margin="0,3,0,0" Click="btnSaveAddGame" />
                         <Button Content="新規" Height="28" Margin="0,3,0,0" Click="btnNewGame" />
+                        <Button Content="候補" Height="28" Margin="0,3,0,0" Click="btnCandidate" />
                     </StackPanel>
                 </Grid>
 
@@ -117,8 +113,8 @@
                     </Grid.Background>
 
                     <local:UC9x9Board x:Name="board" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2"
-                                  uc9x9ButtonClickEvent="board_ButtonClick" 
-                                  uc9x9MouseWheelEvent="board_uc9x9MouseWheelEvent" uc9x9PreviewMouseEvent="board_uc9x9PreviewMouseEvent"/>
+                                  uc9x9MouseWheelEvent="board_uc9x9MouseWheelEvent"
+                                  uc9x9PreviewMouseEvent="board_uc9x9PreviewMouseEvent"/>
                 </Grid>
 
             </Grid>

@@ -92,7 +92,7 @@ namespace Sudoku
                             btn.Background = new SolidColorBrush(Colors.Transparent);
                             btn.BorderBrush = new SolidColorBrush(Colors.LightSlateGray);
                             
-                            btn.Click += (sender, e) => ButtonClickEvent(sender, e);
+                            //btn.Click += (sender, e) => ButtonClickEvent(sender, e);
                             btn.PreviewMouseDown += (sender, e) => PreviewMouseDownEvent(sender, e);
                             btn.MouseWheel += (sender, e) => MouseWheelEvent(sender, e);
 
@@ -228,8 +228,8 @@ namespace Sudoku
             return gc;
         }
 
-        public delegate void ButtonClickEventHandler(int row, int col);
-        public event ButtonClickEventHandler uc9x9ButtonClickEvent;
+        //public delegate void ButtonClickEventHandler(int row, int col);
+        //public event ButtonClickEventHandler uc9x9ButtonClickEvent;
 
         public delegate void PreviewMouseEventHandler(int row, int col, int count, bool left, bool right, bool middle);
         public event PreviewMouseEventHandler uc9x9PreviewMouseEvent;
@@ -237,14 +237,14 @@ namespace Sudoku
         public delegate void MouseWheelEventHandler(int row, int col, string content, int delta, bool leftButton, bool rightButton, bool middleButton);
         public event MouseWheelEventHandler uc9x9MouseWheelEvent;
 
-        private void ButtonClickEvent(object sender, RoutedEventArgs e)
-        {
-            string s = ((Button)sender).Name.ToString().Substring(1);
-            string[] w = s.Split('_');
-            int row = 1 + Int32.Parse(w[0]);
-            int col = 9 - Int32.Parse(w[1]);
-            uc9x9ButtonClickEvent?.Invoke(row, col);
-        }
+        //private void ButtonClickEvent(object sender, RoutedEventArgs e)
+        //{
+        //    string s = ((Button)sender).Name.ToString().Substring(1);
+        //    string[] w = s.Split('_');
+        //    int row = 1 + Int32.Parse(w[0]);
+        //    int col = 9 - Int32.Parse(w[1]);
+        //    uc9x9ButtonClickEvent?.Invoke(row, col);
+        //}
 
         private void PreviewMouseDownEvent(object sender, MouseButtonEventArgs e)
         {

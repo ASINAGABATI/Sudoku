@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sudoku
 {
@@ -53,18 +51,36 @@ namespace Sudoku
                 j = -1;
                 n = 0;
             }
+            public override string ToString()
+            {
+                return "Solution:" + i + "-" + j + " " + n;
+            }
         }
 
-        private readonly int LOOK_I = 0;
-        private readonly int LOOK_J = 6;
+        private int mode;
+        private readonly int LOOK_I = 1;
+        private readonly int LOOK_J = 1;
         private readonly int LOOK_N = 6;
         
         private static readonly int[,] CHK6x6 = new int[,] { { 3, 4, 5, 6, 7, 8 }, { 0, 1, 2, 6, 7, 8 }, { 0, 1, 2, 3, 4, 5 } };
 
         private readonly Ban9x9[,] ban = new Ban9x9[9, 9];
 
-        public Answer(int[,] q)
+        private class Cross
         {
+            public int idx { get; set; }
+            public int candi { get; set; }
+            public Cross(int a, int b)
+            {
+                idx = a;
+                candi = b;
+            }
+        }
+
+        public Answer(int mode_, int[,] q)
+        {
+            mode = mode_;
+
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -79,15 +95,14 @@ namespace Sudoku
             }
             constructCandidate();
         }
-        private void constructCandidate()
+        private bool constructCandidate()
         {
-            List<int> candiFromAnswer(int i, int j)
+            List<int> candidateFromAnser(int i, int j)  // i:行(0,1,..8), j:列(0,1,..8)
             {
-                int[] nine = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+                int[] nine = [1, 1, 1, 1, 1, 1, 1, 1, 1];  // 候補1～9すべて
                 int bi = i / 3 * 3;
                 int bj = j / 3 * 3;
-
-                // roi3x3マスで 問題/決定セルを除外する
+                // (1) roi3x3マスで 問題/解答セル値 を除外する
                 for (int ii = bi; ii < bi + 3; ii++)
                 {
                     for (int jj = bj; jj < bj + 3; jj++)
@@ -99,64 +114,317 @@ namespace Sudoku
                     }
                 }
 
-                // roi3x3マス外の 問題/決定セルを除外
-                int[] i_arr6 = [1, 2, 3, 4, 5, 6];
-                int[] j_arr6 = [ 0,0,0,0,0,0];
+                // (2) roi3x3マス外の垂直/水平位置の 問題/解答セル値 を除外する
+                int[] roi_v6 = [1, 2, 3, 4, 5, 6];
+                int[] roi_h6 = [ 0,0,0,0,0,0];
                 for (int iijj = 0; iijj < 6; iijj++)
                 {
-                    i_arr6[iijj] = CHK6x6[i / 3, iijj];
-                    j_arr6[iijj] = CHK6x6[j / 3, iijj];
+                    roi_v6[iijj] = CHK6x6[i / 3, iijj];
+                    roi_h6[iijj] = CHK6x6[j / 3, iijj];
                 }
-                foreach (int jj in j_arr6)
+                foreach (int jj in roi_h6)
                 {
-                    var idx = ban[i, jj].nn - 1;
-                    if (idx >= 0)
+                    var idx = ban[i, jj].nn;  // 水平位置を見る
+                    if (idx > 0)
                     {
-                        nine[idx] = 0;
+                        nine[idx - 1] = 0;
                     }
                 }
-                foreach (int ii in i_arr6)
+                foreach (int ii in roi_v6)
                 {
-                    var idx = ban[ii, j].nn - 1;
-                    if (idx >= 0)
+                    var idx = ban[ii, j].nn;  // 垂直位置を見る
+                    if (idx > 0)
                     {
-                        nine[idx] = 0;
+                        nine[idx - 1] = 0;
                     }
                 }
 
-                List<int> arr = [];
-                for (var ix = 0; ix < 9; ix++)
+                List<int> arr = []; // 候補
+                foreach(var item in nine.Select((value, index) => new { value, index } ))
                 {
-                    if (nine[ix] == 1)
+                    if (item.value == 1)
                     {
-                        arr.Add(1 + ix);
+                        arr.Add(1 + item.index);
                     }
                 }
-                return arr;
-            } // candiFromAnswer
+                return arr;// 候補
+            } // candidateFromAnser
 
-            for (int i = 0; i < 9; i++)
+            // ban[,].candidate を更新
+            (List<Cross>vertical, List<Cross>horizontal) makeXlist(int m, int n) // 
             {
-                for (int j = 0; j < 9; j++)
+                List<Cross>vd = new ();
+                List<Cross>hd = new ();
+                int[] vin3 = { m * 3, m * 3 + 1, m * 3 + 2 };
+                int[] hin3 = { n * 3, n * 3 + 1, n * 3 + 2 };
+
+                List<int> lstN = new();
+                foreach (int i in vin3)
                 {
-                    ban[i, j].candidate = [];
-                    if (ban[i,j].nn == 0)
+                    foreach (int j in hin3)
                     {
-                        ban[i,j].candidate = candiFromAnswer(i,j);
+                        if (ban[i, j].candidate.Count > 1)
+                        {
+                            foreach (int cn in ban[i, j].candidate)
+                            {
+                                if (!lstN.Contains(cn))
+                                {
+                                    lstN.Add(cn);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                int[] vout6 = { CHK6x6[m, 0], CHK6x6[m, 1], CHK6x6[m, 2], CHK6x6[m, 3], CHK6x6[m, 4], CHK6x6[m, 5] };
+                foreach (int candi in lstN)
+                {
+                    int[,] step1 = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+                    for (int i = 0; i < step1.GetLength(0); i++)
+                    {
+                        foreach (int j in hin3)
+                        {
+                            if (ban[vout6[i], j].candidate.Contains(candi))
+                            {
+                                step1[i, j % 3] = 1;
+                            }
+                        }
+                    }
+                    for (int i1 = 0; i1 < 2; i1++)
+                    {
+                        int[] step2 = { 0, 0, 0 };
+                        for (int j1 = 0; j1 < 3; j1++)
+                        {
+                            for (int i2 = 0; i2 < 3; i2++)
+                            {
+                                if (step1[i1 * 3 + i2, j1] != 0)
+                                {
+                                    step2[j1] = 1;
+                                }
+                            }
+                        }
+                        if (step2.Sum() == 1)
+                        {
+                            int i = 0;
+                            for (; i < 3; i++)
+                            {
+                                if (step2[i] == 1)
+                                {
+                                    break;
+                                }
+                            }
+                            vd.Add(new Cross(i, candi));
+                        }
+                    }
+                }
+
+                int[] hout6 = { CHK6x6[n, 0], CHK6x6[n, 1], CHK6x6[n, 2], CHK6x6[n, 3], CHK6x6[n, 4], CHK6x6[n, 5] };
+                foreach (int candi in lstN)
+                {
+                    int[,] step1 = { { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 } };
+                    foreach (int i in vin3)
+                    {
+                        for (int j = 0; j < step1.GetLength(1); j++)
+                        {
+                            if (ban[i, hout6[j]].candidate.Contains(candi))
+                            {
+                                step1[i % 3, j] = 1;
+                            }
+                        }
+                    }
+                    for(int j1 = 0; j1 < 2; j1++)
+                    {
+                        int[] step2 = { 0, 0, 0 };
+                        for (int i1 = 0; i1 < 3; i1++)
+                        {
+                            for(int j2 = 0; j2 < 3; j2++)
+                            {
+                                if (step1[i1, j1 * 3 + j2] != 0)
+                                {
+                                    step2[i1] = 1;
+                                }
+                            }
+                        }
+                        if (step2.Sum() == 1)
+                        {
+                            int j = 0;
+                            for(; j < 3; j++)
+                            {
+                                if (step2[j] == 1)
+                                {
+                                    break;
+                                }
+                            }
+                            hd.Add(new Cross(j, candi));
+                        }
+                    }
+                }
+
+                return (vd, hd);
+            } // makeXlist
+
+            bool updateCandidate3x3(bool isHorizontal, int m, int n, Cross crs)
+            {
+                bool brk = false;
+                List<int> hlist = new();
+                List<int> vlist = new();
+                if (isHorizontal)
+                {
+                    vlist.Add(m * 3 + crs.idx);
+                    hlist.Add(n * 3);
+                    hlist.Add(n * 3 + 1);
+                    hlist.Add(n * 3 + 2);
+                }
+                else
+                {
+                    hlist.Add(n * 3 + crs.idx);
+                    vlist.Add(m * 3);
+                    vlist.Add(m * 3 + 1);
+                    vlist.Add(m * 3 + 2);
+                }
+                foreach(var i in vlist)
+                {
+                    foreach(var j in hlist)
+                    {
+                        if (ban[i, j].candidate.Contains(crs.candi))
+                        {
+                            var idx = ban[i, j].candidate.IndexOf(crs.candi);
+                            ban[i, j].candidate.RemoveAt(idx);
+                            brk = true;
+                        }
+                    }
+                }
+                return brk;
+            } // updateCandidate3x3
+
+            bool removeDandidate2pair(int m, int n)
+            {
+                var rm_pair = new Dictionary<int, List<int> >();
+                foreach (int i in new int[] { m * 3 + 0, m * 3 + 1, m * 3 + 2 })
+                {
+                    foreach(int j in new int[] { n * 3 + 0, n * 3 + 1, n * 3 + 2 })
+                    {
+                        if (ban[i,j].candidate.Count == 2)
+                        {
+                            int pair_k = ban[i, j].candidate[0] * 10 + ban[i, j].candidate[1];
+                            int itm = i * 10 + j;
+                            if (rm_pair.ContainsKey(pair_k))
+                            {
+                                rm_pair[pair_k].Add(itm);
+                            }
+                            else
+                            {
+                                rm_pair.Add(pair_k, new List<int> { itm} );
+                            }
+                        }
+                    }
+                }
+
+                bool brk = false;
+                foreach (KeyValuePair<int, List<int>> kvp in rm_pair)
+                {
+                    if (kvp.Value.Count == 2)
+                    {
+                        int na = kvp.Key / 10;
+                        int nb =kvp.Key % 10;
+                        int i0 = kvp.Value[0] / 10;
+                        int j0 = kvp.Value[1] % 10;
+
+                        foreach (int i in new int[] { m * 3 + 0, m * 3 + 1, m * 3 + 2 })
+                        {
+                            foreach (int j in new int[] { n * 3 + 0, n * 3 + 1, n * 3 + 2 })
+                            {
+                                if (i0 != i || j0 != j)
+                                {
+                                    List<int> n_lst = new ();
+                                    foreach(var nc in ban[i, j].candidate)
+                                    {
+                                        if (nc != na && nc != nb)
+                                        {
+                                            n_lst.Add(nc);
+                                        }
+                                    }
+                                    if (n_lst.Count > 0)
+                                    {
+                                        ban[i, j].candidate = n_lst;
+                                        brk = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            } // removeDandidate2pair
+            void removeCandidateOne(int m, int n)
+            {
+                int[] nine = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                int[] coord = [-1, -1, -1, -1, -1, -1, -1, -1, -1]; 
+                foreach (int i in new int[] { m * 3 + 0, m * 3 + 1, m * 3 + 2 })
+                {
+                    foreach (int j in new int[] { n * 3 + 0, n * 3 + 1, n * 3 + 2 })
+                    {
+                        foreach (var nc in ban[i, j].candidate)
+                        {
+                            nine[nc - 1]++;
+                            coord[nc - 1] = i * 10 + j;
+                        }
+                    }
+                }
+                for(int i = 0; i < nine.Length; i++)
+                {
+                    if (nine[i] == 1)
+                    {
+                        int i0 = coord[i] / 10;
+                        int j0 = coord[i] % 10;
+                        ban[i0, j0].candidate = new List<int> { 1 + i };
                     }
                 }
             }
 
+            for (int i = 0; i < ban.GetLength(0); i++)
+            {
+                for (int j = 0; j < ban.GetLength(1); j++)
+                {
+                    ban[i, j].candidate = [];
+                    if (ban[i, j].nn == 0)
+                    {
+                        ban[i, j].candidate = candidateFromAnser(i, j); // 3x3セル内で候補を拾う
+                    }
+                }
+            }
 
-        }
+            bool brk = false;
+            foreach (int m in new int[] { 0, 1, 2} )
+            {
+                foreach (int n in new int[] { 0, 1, 2 } )
+                {
+                    // 3x3セルないでの作業
+                    var lst = makeXlist(m, n);
+                    foreach (var vertical in lst.vertical)
+                    {
+                        brk = updateCandidate3x3(false, m, n, vertical); // 垂直方向 2列 に 他3x3セル に垂直性候補 があれば候補から除外する
+                    }
+                    foreach (var horizontal in lst.horizontal)
+                    {
+                        brk = updateCandidate3x3(true, m, n, horizontal); // 水平方向 2行 に 他3x3セル に水平性候補 があれば候補から除外する
+                    }
+
+                    brk = removeDandidate2pair(m, n); // 2つだけの候補が2セルあれば 他の候補列から その2つの候補を除外する 
+
+                    removeCandidateOne(m, n);
+                }
+            }
+            return brk;
+        } // constructCandidate
 
         public int Prn(bool print = true)
         {
             int nzero = 0;
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < ban.GetLength(0); i++)
             {
                 string s = "";
-                for (int j = 0; j < 9; j++)
+                for (int j = 0; j < ban.GetLength(1); j++)
                 {
                     var n = ban[i, j].nn;
                     if (n == 0)
@@ -202,361 +470,37 @@ namespace Sudoku
             }
             return false;
         }
-        private Solution solutionCell(int i, int j)
-        {
-            int[] array6(int x)
-            {
-                int x0 = x / 3;
-                int[] i_array = new int[6];
-                for (int x1 = 0; x1 < 6; x1++)
-                {
-                    i_array[x1] = CHK6x6[x0, x1];
-                }
-                return i_array;
-            }
-            int[] array2(int x)
-            {
-                int x0 = x / 3 * 3;
-                List<int> i_array = [x0, x0 + 1, x0 + 2];
-                i_array.RemoveAt(x % 3);
-
-                return [.. i_array];
-            }
-
-            List<int> i_3 = [];
-            List<int> j_3 = [];
-            int ix = i / 3 * 3;
-            int jx = j / 3 * 3;
-            for (int idx = 0; idx < 3; idx++)
-            {
-                i_3.Add(ix + idx);
-                j_3.Add(jx + idx);
-            }
-
-            bool oneCandidate(int n)
-            {
-                int nc = 0;
-                for (int idx = 0; idx < 3; idx++)
-                {
-                    for (int jdx = 0; jdx < 3; jdx++)
-                    {
-                        int ii = i_3[idx];
-                        int jj = j_3[jdx];
-                        if (ban[ii,jj].candidate.Contains(n))
-                        {
-                            nc++;
-                        }
-                    }
-                }
-
-                return nc == 1;
-            }
-            int[,] pick3x3(int i0, int j0, int n)
-            {
-                int[,] w3x3 = new int[3, 3];
-                int ii = (i0 / 3) * 3;
-                int jj = (j0 / 3) * 3;
-                for (int i1 = 0; i1 < 3; i1++)
-                {
-                    for (int j1 = 0; j1 < 3; j1++)
-                    {
-                        w3x3[i1, j1] = ban[ii + i1, jj + j1].nn == 0 ? 1 : 0; // 0:決定していない 1:決定している
-                    }
-                }
-
-                int[] iarr2 = array2(i0);
-                int[] jarr6 = array6(j0);
-                for (int i1 = 0; i1 < 2; i1++)
-                {
-                    for (int j1 = 0; j1 < 6; j1++)
-                    {
-                        if (ban[iarr2[i1], jarr6[j1]].nn == n)
-                        {
-                            w3x3[iarr2[i1] % 3, 0] = 0; // 水平方向 roi3x3外 6列に内に n がある. 
-                            w3x3[iarr2[i1] % 3, 1] = 0;
-                            w3x3[iarr2[i1] % 3, 2] = 0;
-                        }
-                    }
-                }
-                int[] iarr6 = array6(i0);
-                int[] jarr2 = array2(j0);
-                for (int i1 = 0; i1 < 6; i1++)
-                {
-                    for (int j1 = 0; j1 < 2; j1++)
-                    {
-                        if (ban[iarr6[i1], jarr2[j1]].nn == n)
-                        {
-                            w3x3[0, jarr2[j1] % 3] = 0; // 垂直方向 roi3x3外 6行に内に n がある. 
-                            w3x3[1, jarr2[j1] % 3] = 0;
-                            w3x3[2, jarr2[j1] % 3] = 0;
-                        }
-                    }
-                }
-
-                return w3x3;
-            }
-
-            int[] array3(int x)
-            {
-                int x0 = x / 3 * 3;
-                int[] i_array = [x0, x0 + 1, x0 + 2];
-                return i_array;
-            }
-            bool directionCandidate(int n)
-            {
-                int[,] p3x3 = pick3x3(i, j, n);
-                // h-direction
-                int[] iarr2 = array2(i);
-                int[] iarr3 = array3(i);
-                int[] jarr6 = array6(j);
-                int[,] h_dir = { { 0, 0 }, { 0, 0 }, { 0, 0 } };
-                for (int ii = 0; ii < 3; ii++)
-                {
-                    for (int jj = 0; jj < 6; jj++)
-                    {
-                        if (ban[iarr3[ii], jarr6[jj]].candidate.Contains(n))
-                        {
-                            h_dir[ii, jj / 3] = 1;
-                        }
-                    }
-                }
-                for (int jj = 0; jj < 2; jj++)
-                {
-                    if (h_dir[0, jj] + h_dir[1, jj] + h_dir[2, jj] > 1)
-                    {
-                        h_dir[0, jj] = h_dir[1, jj] = h_dir[2, jj] = 0;
-                    }
-                }
-                for (int ii = 0; ii < 3; ii++)
-                {
-                    if (h_dir[ii, 0] + h_dir[ii, 1] > 0)
-                    {
-                        if (iarr2.Contains(iarr3[ii]))
-                        {
-                            p3x3[ii, 0] = 0; p3x3[ii, 1] = 0; p3x3[ii, 2] = 0;
-                        }
-                    }
-                }
-
-                // v-direction
-                int[] jarr2 = array2(j);
-                int[] jarr3 = array3(j);
-                int[] iarr6 = array6(i);
-                int[,] v_dir = { { 0, 0, 0 }, { 0, 0, 0 } };
-                for (int jj = 0; jj < 3; jj++)
-                {
-                    for (int ii = 0; ii < 6; ii++)
-                    {
-                        if (ban[iarr6[ii], jarr3[jj]].candidate.Contains(n))
-                        {
-                            v_dir[ii / 3, jj] = 1;
-                        }
-                    }
-                }
-                for (int ii = 0; ii < 2; ii++)
-                {
-                    if (v_dir[ii, 0] + v_dir[ii, 1] + v_dir[ii, 2] > 1)
-                    {
-                        v_dir[ii, 0] = v_dir[ii, 1] = v_dir[ii, 2] = 0;
-                    }
-                }
-                for (int jj = 0; jj < 3; jj++)
-                {
-                    if (v_dir[0, jj] + v_dir[1, jj] > 0)
-                    {
-                        if (jarr2.Contains(jarr3[jj]))
-                        {
-                            p3x3[0, jj] = 0; p3x3[1, jj] = p3x3[2, jj] = 0;
-                        }
-                    }
-                }
-
-                int s = 0;
-                for (int ii = 0; ii < 3; ii++)
-                {
-                    for(int jj = 0; jj < 3; jj++)
-                    {
-                        s += p3x3[ii, jj];
-                    }
-                }
-                return s == 1;　// 候補が１つなら n で決定
-            }
-
-            bool directionCandidate2(int n)
-            {
-                int[,] p3x3 = pick3x3(i, j, n);
-
-                // h-direction
-                int[] iarr3 = array3(i);
-                int[] jarr6 = array6(j);
-                int[,] h_dir = { { 0, 0 }, { 0, 0 }, { 0, 0 } };
-                for (int ii = 0; ii < 3; ii++)
-                {
-                    for (int jj = 0; jj < 6; jj++)
-                    {
-                        if (ban[iarr3[ii], jarr6[jj]].candidate.Contains(n))
-                        {
-                            h_dir[ii, jj / 3] = 1;
-                        }
-                    }
-                }
-                int[] iii = [0, 0, 0];
-                iii[i % 3] = 1;
-                int h_x = 0;
-                for(int ii = 0; ii < 3; ii++)
-                {
-                    if (iii[ii] == 1)
-                    {
-                        if (h_dir[ii, 0] == 0 && h_dir[ii, 1] == 0)
-                        {
-                            h_x++;
-                        }
-                    }
-                    else
-                    {
-                        if (h_dir[ii, 0] == 1 || h_dir[ii, 1] == 1)
-                        {
-                            h_x++;
-                        }
-                    }
-                }
-                if (h_x == 3)
-                {
-                    for(int ii = 0; ii < 3; ii++)
-                    {
-                        if (iii[ii] == 0)
-                        {
-                            p3x3[ii, 0] = p3x3[ii, 1] = p3x3[ii, 2] = 0;
-                        }
-                    }
-                }
-
-                // v-direction
-                int[] jarr3 = array3(j);
-                int[] iarr6 = array6(i);
-                int[,] v_dir = { { 0, 0, 0 }, { 0, 0, 0 } };
-                for (int ii = 0; ii < 6; ii++)
-                {
-                    for (int jj = 0; jj < 3; jj++)
-                        {
-                        if (ban[iarr6[ii], jarr3[jj]].candidate.Contains(n))
-                        {
-                            v_dir[ii / 3, jj] = 1;
-                        }
-                    }
-                }
-                int[] jjj = [0, 0, 0];
-                jjj[j % 3] = 1;
-                int v_x = 0;
-                for (int jj = 0; jj < 3; jj++)
-                {
-                    if (jjj[jj] == 1)
-                    {
-                        if (v_dir[0, jj] == 0 && v_dir[1, jj] == 0)
-                        {
-                            v_x++;
-                        }
-                    }
-                    else
-                    {
-                        if (v_dir[0, jj] == 1 || v_dir[1, jj] == 1)
-                        {
-                            v_x++;
-                        }
-                    }
-                }
-                if (v_x == 3)
-                {
-                    for (int jj = 0; jj < 3; jj++)
-                    {
-                        if (jjj[jj] == 0)
-                        {
-                            p3x3[0, jj] = p3x3[1, jj] = p3x3[2, jj] = 0;
-                        }
-                    }
-                }
-
-                int s = 0;
-                for (int ii = 0; ii < 3; ii++)
-                {
-                    for (int jj = 0; jj < 3; jj++)
-                    {
-                        s += p3x3[ii, jj];
-                    }
-                }
-                return s == 1;　// 候補が１つなら n で決定
-            }
-
-            Solution solution = new();
-            foreach(int candi in ban[i, j].candidate)
-            {
-                // 3x3マス内で candi は roiセルだけ...candiで決定
-                if (oneCandidate(candi))
-                {
-                    solution.i = i;
-                    solution.j = j;
-                    solution.n = candi;
-                    break;
-                }
-
-                // 3x3マス外 6マスにh方向,v方向性があれば 3x3のh,v方向を除外できる
-                if (directionCandidate(candi))
-                {
-                    solution.i = i;
-                    solution.j = j;
-                    solution.n = candi;
-                    break;
-                }
-
-                // 
-                if (directionCandidate2(candi))
-                {
-                    solution.i = i;
-                    solution.j = j;
-                    solution.n = candi;
-                    break;
-                }
-            }
-
-            return solution;
-        } // solutionCell
 
         public int Test()
         {
-            int cnt = 0;
-            int curr_i;
-            int curr_j;
-            void startAddr()
+            for (; ;)
             {
-                curr_i = -1;
-                curr_j = 8;
-            }
-            startAddr();
+                int upd = 0;
 
-            for(; ; )
-            {
-                if ( !nextSpaceCell(ref curr_i, ref curr_j) )
+                for ( int i = 0; i < 9; i++)
                 {
-                    break;
+                    for (int j = 0; j < 9; j++)
+                    {
+                        if (ban[i, j].candidate.Count() == 1)
+                        {
+                            ban[i, j].nn = ban[i, j].candidate[0];
+                            ban[i, j].condition = 2;
+                            ban[i, j].candidate = [];
+                            upd++;
+                        }
+                    }
                 }
-                //if (curr_i == LOOK_I && curr_j == LOOK_J)
-                //{
-                //    Console.WriteLine("   (" + curr_i + "," + curr_j + ")");
-                //}
-                Solution solution = solutionCell(curr_i, curr_j);
-                if (solution.n > 0)
+                if (upd == 0)
                 {
-                    Console.WriteLine(++cnt + " i:" + curr_i + " j:" + curr_j + " n:" + solution.n);
-                    ban[curr_i, curr_j].nn = solution.n;
-                    ban[curr_i, curr_j].condition = 2;
+                    break; // ギブアップ or すべて解答
+                }
+                constructCandidate();
 
-                    constructCandidate();
-                    startAddr();
-                }
             }
 
             return Prn(false);
         }
+
         public Ban9x9[,] getResult()
         {
             return ban;

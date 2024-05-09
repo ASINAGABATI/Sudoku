@@ -24,9 +24,12 @@ namespace Sudoku
         public List<Kifu> banmen { get; set; }
         public int result { get; set; }
         public List<Kifu> resultList { get; }
+        private int mode;
 
-        public DialogProgress()
+        public DialogProgress(int mode_)
         {
+            mode = mode_;
+
             InitializeComponent();
 
             Activated += (s, e) => {
@@ -112,8 +115,11 @@ namespace Sudoku
                 cur_ans[masu.row - 1, 9 - masu.col] = masu.num;
                 current[masu.row - 1, 9 - masu.col] = Math.Abs(masu.num);
             }
-            Answer sudoku = new(current);
-            int zn = sudoku.Test();
+            Answer sudoku = new(mode, current);
+            if (mode == 1)
+            {
+                sudoku.Test();
+            }
             Ban9x9[,] ban = sudoku.getResult();
 
             banmen.Clear();

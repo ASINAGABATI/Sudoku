@@ -143,6 +143,18 @@ namespace Sudoku
             lstHistory.ItemsSource = lst;
             lstHistory.SelectedIndex = lst.Count - 1;
         }
+        private void btnCandidate(object sender, EventArgs e)
+        {
+            var dlg = new DialogProgress(2);
+            dlg.banmen = board.getBanmen(colorAnswer);
+            dlg.Owner = this;
+            dlg.ShowDialog();
+
+        }
+        private void btnExit(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void save(int k)
         {
             Play play = new();
@@ -183,7 +195,7 @@ namespace Sudoku
         }
         private async void btnAnswer(object sender, RoutedEventArgs e)
         {
-            var dlg = new DialogProgress();
+            var dlg = new DialogProgress(1);
             dlg.banmen = board.getBanmen(colorAnswer);
             dlg.Owner = this;
             dlg.ShowDialog();
@@ -195,7 +207,6 @@ namespace Sudoku
                     int idx = lstHistory.SelectedIndex;
                     numPlace.updateCell(idx, item.row + 1, 9 - item.col, item.num, 1);
                 }
-
             }
         }
         private void btnDiagnose(object sender, RoutedEventArgs e)
@@ -448,10 +459,10 @@ namespace Sudoku
             sblbl1.Content = "■" + gt.ToString();
         }
 
-        private void board_ButtonClick(int row, int col)
-        {
-            sblbl2.Content = "click event row:" + row.ToString() + " ,col:" + col.ToString();
-        }
+        //private void board_ButtonClick(int row, int col)
+        //{
+        //    sblbl2.Content = "click event row:" + row.ToString() + " ,col:" + col.ToString();
+        //}
 
         private void board_uc9x9MouseWheelEvent(int row, int col, string content, int delta, bool leftButton, bool rightButton, bool middleButton)
         {
