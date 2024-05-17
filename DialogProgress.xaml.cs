@@ -21,23 +21,37 @@ namespace Sudoku
     public partial class DialogProgress : Window
     {
         private int first = 0;
+        private int mode;   // 1:解答, 2:候補
+
         public List<Kifu> banmen { get; set; }
         public int result { get; set; }
         public List<Kifu> resultList { get; }
-        private int mode;
+
+        private Answer sudoku;
 
         public DialogProgress(int mode_)
         {
+            if (mode_ !=1 && mode_ != 2)
+            {
+                MessageBox.Show("DialogProgress constructor. mode:" + mode_, "Programming Miss!", MessageBoxButton.OK, MessageBoxImage.Stop);
+            }
             mode = mode_;
 
             InitializeComponent();
 
-            Activated += (s, e) => {
+            Activated += (s, e) => 
+            {
                 if (++first == 1)
                 {
                     loadedDialog(s, e);
                 }
             };
+
+            if (mode == 2)
+            {
+                aquireMasu.Content = "ステップ";
+                btnExit.Content = "閉じる";
+            }
 
             resultList = new();
             int cols = (int)Math.Ceiling(masu9x9.ColumnDefinitions.Count / 2.0);
@@ -68,11 +82,6 @@ namespace Sudoku
                             int cnt1 = grid.Children.Count;
                             grid.Children.Add(lbl);
                             int cnt2 = grid.Children.Count;
-
-                            //if (cnt2 == 2)
-                            //{
-                            //    Label lb1 = (Label)grid.Children[1];
-                            //}
 
                             string[] candi = ["1", "2", "3", "4", "5", "6", "7", "8"];
                             HorizontalAlignment[] hori = [HorizontalAlignment.Center, HorizontalAlignment.Right];
@@ -115,13 +124,18 @@ namespace Sudoku
                 cur_ans[masu.row - 1, 9 - masu.col] = masu.num;
                 current[masu.row - 1, 9 - masu.col] = Math.Abs(masu.num);
             }
-            Answer sudoku = new(mode, current);
+            sudoku = new(mode, current);
             if (mode == 1)
             {
                 sudoku.Test();
             }
             Ban9x9[,] ban = sudoku.getResult();
 
+            redraw(cur_ans, ban);
+
+        }
+        private void redraw(int[,]cur_ans, Ban9x9[,] ban)
+        {
             banmen.Clear();
             for (int i = 0; i < 9; i++)
             {
@@ -157,7 +171,7 @@ namespace Sudoku
                     }
                 }
             }
-            foreach(var k in banmen)
+            foreach (var k in banmen)
             {
                 int i0 = k.row - 1;
                 int j0 = 9 - k.col;
@@ -181,7 +195,7 @@ namespace Sudoku
                     lbl.Foreground = n > 0 ? Brushes.Red : Brushes.Blue;
                 }
                 int ix = 0;
-                foreach(var candi in ban[i0, j0].candidate)
+                foreach (var candi in ban[i0, j0].candidate)
                 {
                     Label lbl2 = (Label)grid.Children[idx + ix++];
                     lbl2.Content = candi.ToString();
@@ -209,12 +223,34 @@ namespace Sudoku
                     }
                 }
             }
+
         }
 
         private async void btnAcquire(object sender, RoutedEventArgs e)
         {
-            result = 1;
-            this.Close();
+            if (mode == 1)
+            {
+                result = 1;
+                this.Close();
+            }
+            else
+            {
+                Ban9x9[,] ban = sudoku.getResult();
+
+                int state = sudoku.TestStepByStep();
+
+                int[,] cur_ans = new int[9, 9];
+                foreach (var masu in banmen)
+                {
+                    cur_ans[masu.row - 1, 9 - masu.col] = masu.num;
+                }
+                redraw(cur_ans, ban);
+
+                if (state == 0)
+                {
+                    aquireMasu.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private async void btnCancel(object sender, RoutedEventArgs e)

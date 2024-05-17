@@ -26,8 +26,8 @@ namespace Sudoku
     /// </summary>
     public partial class UC9x9Board : UserControl
     {
-        private readonly string[] SUJI = ["9", "8", "7", "6", "5", "4", "3", "2", "1"];
-        private readonly string[] DAN = ["九", "八", "七", "六", "五", "四", "三", "二", "一"];
+        // private readonly string[] SUJI = ["9", "8", "7", "6", "5", "4", "3", "2", "1"];
+        // private readonly string[] DAN = ["九", "八", "七", "六", "五", "四", "三", "二", "一"];
         private System.Windows.Media.Color gridBackcolor0 = Colors.WhiteSmoke;
         private System.Windows.Media.Color gridBackcolor1 = Colors.Gainsboro;
 

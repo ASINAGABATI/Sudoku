@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
-    <VersionPrefix>1.1.2</VersionPrefix>
+    <VersionPrefix>1.1.3</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <PackageIcon>floorBall4.png</PackageIcon>
     <Product>Hati数独</Product>
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Compile Remove="Answer 20240506_1.cs" />
+    <Compile Remove="DialogProgress.xaml_bk1.cs" />
   </ItemGroup>
 
   <ItemGroup>

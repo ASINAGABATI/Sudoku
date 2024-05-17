@@ -354,7 +354,7 @@ namespace Sudoku
                         }
                     }
                 }
-                return true;
+                return brk;
             } // removeDandidate2pair
             void removeCandidateOne(int m, int n)
             {
@@ -471,7 +471,7 @@ namespace Sudoku
             return false;
         }
 
-        public int Test()
+        public void Test()
         {
             for (; ;)
             {
@@ -495,10 +495,31 @@ namespace Sudoku
                     break; // ギブアップ or すべて解答
                 }
                 constructCandidate();
-
             }
+        }
 
-            return Prn(false);
+        public int TestStepByStep()
+        {
+            int upd = 0;
+
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (ban[i, j].candidate.Count() == 1)
+                    {
+                        ban[i, j].nn = ban[i, j].candidate[0];
+                        ban[i, j].condition = 2;
+                        ban[i, j].candidate = [];
+                        upd++;
+                    }
+                }
+            }
+            if (upd > 0)
+            {
+                constructCandidate();
+            }
+            return upd;  // 0:next 1:end
         }
 
         public Ban9x9[,] getResult()
