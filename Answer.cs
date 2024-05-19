@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Sudoku
@@ -297,7 +298,7 @@ namespace Sudoku
                 return brk;
             } // updateCandidate3x3
 
-            bool removeDandidate2pair(int m, int n)
+            bool removeCandidate2pair(int m, int n)
             {
                 var rm_pair = new Dictionary<int, List<int> >();
                 foreach (int i in new int[] { m * 3 + 0, m * 3 + 1, m * 3 + 2 })
@@ -355,7 +356,7 @@ namespace Sudoku
                     }
                 }
                 return brk;
-            } // removeDandidate2pair
+            } // removeCandidate2pair
             void removeCandidateOne(int m, int n)
             {
                 int[] nine = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -366,15 +367,15 @@ namespace Sudoku
                     {
                         foreach (var nc in ban[i, j].candidate)
                         {
-                            nine[nc - 1]++;
-                            coord[nc - 1] = i * 10 + j;
+                            nine[nc - 1]++;             // 候補値カウント
+                            coord[nc - 1] = i * 10 + j; // (i, j)
                         }
                     }
                 }
                 for(int i = 0; i < nine.Length; i++)
                 {
                     if (nine[i] == 1)
-                    {
+                    { // 候補がひとつ
                         int i0 = coord[i] / 10;
                         int j0 = coord[i] % 10;
                         ban[i0, j0].candidate = new List<int> { 1 + i };
@@ -395,24 +396,31 @@ namespace Sudoku
             }
 
             bool brk = false;
-            foreach (int m in new int[] { 0, 1, 2} )
+            for(int k = 0; k < 2; k++)
             {
-                foreach (int n in new int[] { 0, 1, 2 } )
+                foreach (int m in new int[] { 0, 1, 2} )
                 {
-                    // 3x3セルないでの作業
-                    var lst = makeXlist(m, n);
-                    foreach (var vertical in lst.vertical)
+                    foreach (int n in new int[] { 0, 1, 2 } )
                     {
-                        brk = updateCandidate3x3(false, m, n, vertical); // 垂直方向 2列 に 他3x3セル に垂直性候補 があれば候補から除外する
-                    }
-                    foreach (var horizontal in lst.horizontal)
-                    {
-                        brk = updateCandidate3x3(true, m, n, horizontal); // 水平方向 2行 に 他3x3セル に水平性候補 があれば候補から除外する
-                    }
+                        if (m == 2 && n == 1)
+                        {
+                            Debug.WriteLine("m:" + m + " n:" + n + " ");
+                        }
+                        // 3x3セル内での作業
+                        var lst = makeXlist(m, n);
+                        foreach (var horizontal in lst.horizontal)
+                        {
+                            brk = updateCandidate3x3(true, m, n, horizontal); // 水平方向 2行 に 他3x3セル に水平性候補 があれば候補から除外する
+                        }
+                        foreach (var vertical in lst.vertical)
+                        {
+                            brk = updateCandidate3x3(false, m, n, vertical); // 垂直方向 2列 に 他3x3セル に垂直性候補 があれば候補から除外する
+                        }
 
-                    brk = removeDandidate2pair(m, n); // 2つだけの候補が2セルあれば 他の候補列から その2つの候補を除外する 
+                        brk = removeCandidate2pair(m, n); // 2つだけの候補が2セルあれば 他の候補列から その2つの候補を除外する 
 
-                    removeCandidateOne(m, n);
+                        removeCandidateOne(m, n);
+                    }
                 }
             }
             return brk;
